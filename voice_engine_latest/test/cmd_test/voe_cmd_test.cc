@@ -20,9 +20,10 @@
 #include "gflags/gflags.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "webrtc/base/scoped_ptr.h"
+#include "webrtc/call/rtc_event_log.h"
 #include "webrtc/engine_configurations.h"
 #include "webrtc/modules/audio_processing/include/audio_processing.h"
-#include "webrtc/test/channel_transport/include/channel_transport.h"
+#include "webrtc/test/channel_transport/channel_transport.h"
 #include "webrtc/test/testsupport/fileutils.h"
 #include "webrtc/test/testsupport/trace_to_stderr.h"
 #include "webrtc/voice_engine/include/voe_audio_processing.h"
@@ -260,7 +261,7 @@ void RunTest(std::string out_path) {
     fflush(NULL);
   }
 
-  rtc::scoped_ptr<VoiceChannelTransport> voice_channel_transport(
+  VoiceChannelTransport* voice_channel_transport(
       new VoiceChannelTransport(netw, chan));
 
   char ip[64];
@@ -451,7 +452,8 @@ void RunTest(std::string out_path) {
       printf("%i. Toggle Opus DTX \n", option_index++);
       printf("%i. Set bit rate (only take effect on codecs that allow the "
              "change) \n", option_index++);
-      printf("%i. Toggle debug recording \n", option_index++);
+      printf("%i. Toggle AECdump recording \n", option_index++);
+      printf("%i. Record RtcEventLog file of 30 seconds \n", option_index++);
 
       printf("Select action or %i to stop the call: ", option_index);
       int option_selection;
@@ -784,8 +786,9 @@ void RunTest(std::string out_path) {
         res = codec->GetSendCodec(chan, cinst);
         VALIDATE;
         printf("Current bit rate is %i bps, set to: ", cinst.rate);
-        ASSERT_EQ(1, scanf("%i", &cinst.rate));
-        res = codec->SetSendCodec(chan, cinst);
+        int new_bitrate_bps;
+        ASSERT_EQ(1, scanf("%i", &new_bitrate_bps));
+        res = codec->SetBitRate(chan, new_bitrate_bps);
         VALIDATE;
       } else if (option_selection == option_index++) {
         const char* kDebugFileName = "audio.aecdump";
@@ -797,6 +800,9 @@ void RunTest(std::string out_path) {
           printf("Debug recording named %s started\n", kDebugFileName);
         }
         debug_recording_started = !debug_recording_started;
+      } else if (option_selection == option_index++) {
+        const char* kDebugFileName = "eventlog.rel";
+        codec->GetEventLog()->StartLogging(kDebugFileName, 30000);
       } else {
         break;
       }
@@ -844,6 +850,9 @@ void RunTest(std::string out_path) {
     newcall = (end_option == 1);
     // Call loop
   }
+
+  // Transports should be deleted before channel deletion.
+  delete voice_channel_transport;
   for (int i = 0; i < kMaxNumChannels; ++i) {
     delete voice_channel_transports[i];
     voice_channel_transports[i] = NULL;
@@ -854,7 +863,7 @@ void RunTest(std::string out_path) {
   VALIDATE;
 
   for (int i = 0; i < kMaxNumChannels; ++i) {
-    channels[i] = base1->DeleteChannel(channels[i]);
+    res = base1->DeleteChannel(channels[i]);
     VALIDATE;
   }
 }
