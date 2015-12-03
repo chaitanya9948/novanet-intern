@@ -10,7 +10,7 @@
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "webrtc/base/scoped_ptr.h"
-#include "webrtc/modules/audio_coding/codecs/opus/interface/opus_interface.h"
+#include "webrtc/modules/audio_coding/codecs/opus/opus_interface.h"
 #include "webrtc/test/testsupport/fileutils.h"
 
 using ::std::string;
@@ -45,15 +45,15 @@ class OpusFecTest : public TestWithParam<coding_param> {
 
   int block_duration_ms_;
   int sampling_khz_;
-  int block_length_sample_;
+  size_t block_length_sample_;
 
   int channels_;
   int bit_rate_;
 
   size_t data_pointer_;
   size_t loop_length_samples_;
-  int max_bytes_;
-  int encoded_bytes_;
+  size_t max_bytes_;
+  size_t encoded_bytes_;
 
   WebRtcOpusEncInst* opus_encoder_;
   WebRtcOpusDecInst* opus_decoder_;
@@ -122,7 +122,8 @@ void OpusFecTest::TearDown() {
 OpusFecTest::OpusFecTest()
     : block_duration_ms_(kOpusBlockDurationMs),
       sampling_khz_(kOpusSamplingKhz),
-      block_length_sample_(block_duration_ms_ * sampling_khz_),
+      block_length_sample_(
+          static_cast<size_t>(block_duration_ms_ * sampling_khz_)),
       data_pointer_(0),
       max_bytes_(0),
       encoded_bytes_(0),
@@ -131,18 +132,18 @@ OpusFecTest::OpusFecTest()
 }
 
 void OpusFecTest::EncodeABlock() {
-  int16_t value = WebRtcOpus_Encode(opus_encoder_,
-                                    &in_data_[data_pointer_],
-                                    block_length_sample_,
-                                    max_bytes_, &bit_stream_[0]);
+  int value = WebRtcOpus_Encode(opus_encoder_,
+                                &in_data_[data_pointer_],
+                                block_length_sample_,
+                                max_bytes_, &bit_stream_[0]);
   EXPECT_GT(value, 0);
 
-  encoded_bytes_ = value;
+  encoded_bytes_ = static_cast<size_t>(value);
 }
 
 void OpusFecTest::DecodeABlock(bool lost_previous, bool lost_current) {
   int16_t audio_type;
-  int16_t value_1 = 0, value_2 = 0;
+  int value_1 = 0, value_2 = 0;
 
   if (lost_previous) {
     // Decode previous frame.
@@ -154,14 +155,14 @@ void OpusFecTest::DecodeABlock(bool lost_previous, bool lost_current) {
     } else {
       value_1 = WebRtcOpus_DecodePlc(opus_decoder_, &out_data_[0], 1);
     }
-    EXPECT_EQ(block_length_sample_, value_1);
+    EXPECT_EQ(static_cast<int>(block_length_sample_), value_1);
   }
 
   if (!lost_current) {
     // Decode current frame.
     value_2 = WebRtcOpus_Decode(opus_decoder_, &bit_stream_[0], encoded_bytes_,
                                 &out_data_[value_1 * channels_], &audio_type);
-    EXPECT_EQ(block_length_sample_, value_2);
+    EXPECT_EQ(static_cast<int>(block_length_sample_), value_2);
   }
 }
 
@@ -196,7 +197,7 @@ TEST_P(OpusFecTest, RandomPacketLossTest) {
       EncodeABlock();
 
       // Check if payload has FEC.
-      int16_t fec = WebRtcOpus_PacketHasFec(&bit_stream_[0], encoded_bytes_);
+      int fec = WebRtcOpus_PacketHasFec(&bit_stream_[0], encoded_bytes_);
 
       // If FEC is disabled or the target packet loss rate is set to 0, there
       // should be no FEC in the bit stream.
