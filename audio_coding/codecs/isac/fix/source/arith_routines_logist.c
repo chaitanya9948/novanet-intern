@@ -388,7 +388,7 @@ int16_t WebRtcIsacfix_DecLogisticMulti2(int16_t *dataQ7,
           /* Intending to read outside the stream. This can happen for the last
            * two or three bytes. It is how the algorithm is implemented. Do
            * not read from the bit stream and insert zeros instead. */
-          streamVal = WEBRTC_SPL_LSHIFT_W32(streamVal, 8);
+          streamVal <<= 8;
           if (streamData->full == 0) {
             offset++;  // We would have incremented the pointer in this case.
             streamData->full = 1;
@@ -396,7 +396,7 @@ int16_t WebRtcIsacfix_DecLogisticMulti2(int16_t *dataQ7,
             streamData->full = 0;
           }
         }
-        W_upper = WEBRTC_SPL_LSHIFT_W32(W_upper, 8);
+        W_upper <<= 8;
       }
     }
     envCount++;

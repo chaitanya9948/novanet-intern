@@ -25,6 +25,9 @@
 /*----------------------------------------------------------------*
  *  lpc analysis (subrutine to LPCencode)
  *---------------------------------------------------------------*/
+/*----------------------------------------------------------------*
+ *  changed by Rishabh
+ *---------------------------------------------------------------*/
 
 void WebRtcIlbcfix_SimpleLpcAnalysis(
     int16_t *lsf,   /* (o) lsf coefficients */
@@ -34,7 +37,7 @@ void WebRtcIlbcfix_SimpleLpcAnalysis(
                                      ) {
   int k;
   int scale;
-  int16_t is;
+  size_t is;
   int16_t stability;
   /* Stack based */
   int16_t A[LPC_FILTERORDER + 1];

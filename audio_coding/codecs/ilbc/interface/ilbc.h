@@ -18,6 +18,7 @@
 #ifndef WEBRTC_MODULES_AUDIO_CODING_CODECS_ILBC_MAIN_INTERFACE_ILBC_H_
 #define WEBRTC_MODULES_AUDIO_CODING_CODECS_ILBC_MAIN_INTERFACE_ILBC_H_
 
+#include <stddef.h>
 /*
  * Define the fixpoint numeric formats
  */

@@ -16,6 +16,10 @@
  *
  */
 
+/*----------------------------------------------------------------*
+ * changed by Rishabh
+ *---------------------------------------------------------------*/
+
 #ifndef WEBRTC_MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_BANDWIDTH_ESTIMATOR_H_
 #define WEBRTC_MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_BANDWIDTH_ESTIMATOR_H_
 
@@ -90,12 +94,12 @@ extern "C" {
   /* Index         - integer (range 0...23) indicating bottle neck & jitter as estimated by other side */
   /* returns 0 if everything went fine, -1 otherwise                                                   */
   int16_t WebRtcIsac_UpdateBandwidthEstimator(
-      BwEstimatorstr*    bwest_str,
+      BwEstimatorstr* bwest_str,
       const uint16_t rtp_number,
-      const int32_t  frame_length,
+      const int32_t frame_length,
       const uint32_t send_ts,
       const uint32_t arr_ts,
-      const int32_t  pksize);
+      const size_t pksize);
 
   /* Update receiving estimates. Used when we only receive BWE index, no iSAC data packet. */
   int16_t WebRtcIsac_UpdateUplinkBwImpl(
@@ -127,6 +131,15 @@ extern "C" {
   int32_t WebRtcIsac_GetUplinkMaxDelay(
       const BwEstimatorstr *bwest_str);
 
+  /* Fills in an IsacExternalBandwidthInfo struct. */
+  void WebRtcIsacBw_GetBandwidthInfo(
+      BwEstimatorstr* bwest_str,
+      enum IsacSamplingRate decoder_sample_rate_hz,
+      IsacBandwidthInfo* bwinfo);
+
+  /* Uses the values from an IsacExternalBandwidthInfo struct. */
+  void WebRtcIsacBw_SetBandwidthInfo(BwEstimatorstr* bwest_str,
+                                     const IsacBandwidthInfo* bwinfo);
 
   /*
    * update amount of data in bottle neck buffer and burst handling

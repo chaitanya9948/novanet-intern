@@ -24,6 +24,9 @@
 /*----------------------------------------------------------------*
  *  lsf interpolator (subrutine to LPCencode)
  *---------------------------------------------------------------*/
+/*----------------------------------------------------------------*
+ *  changed by Rishabh
+ *---------------------------------------------------------------*/
 
 void WebRtcIlbcfix_SimpleInterpolateLsf(
     int16_t *syntdenum, /* (o) the synthesis filter denominator
@@ -42,7 +45,8 @@ void WebRtcIlbcfix_SimpleInterpolateLsf(
     IlbcEncoder *iLBCenc_inst
     /* (i/o) the encoder state structure */
                                         ) {
-  int i, pos, lp_length;
+  size_t i;
+  int pos, lp_length;
 
   int16_t *lsf2, *lsfdeq2;
   /* Stack based */

@@ -14,6 +14,9 @@
  * Functions for arithmetic coding.
  *
  */
+/*----------------------------------------------------------------*
+ * changed by Rishabh
+ *---------------------------------------------------------------*/
 
 #ifndef WEBRTC_MODULES_AUDIO_CODING_CODECS_ISAC_FIX_SOURCE_ARITH_ROUTINS_H_
 #define WEBRTC_MODULES_AUDIO_CODING_CODECS_ISAC_FIX_SOURCE_ARITH_ROUTINS_H_
@@ -74,7 +77,7 @@ int16_t WebRtcIsacfix_EncTerminate(Bitstr_enc *streamData);
  * Return value             : number of bytes in the stream so far
  *                            <0 if error detected
  */
-int16_t WebRtcIsacfix_DecLogisticMulti2(
+int WebRtcIsacfix_DecLogisticMulti2(
     int16_t *data,
     Bitstr_dec *streamData,
     const int32_t *env,
