@@ -260,7 +260,8 @@ int16_t WebRtcIsacfix_DecodePlcImpl(int16_t *signal_out16,
   int16_t myDecayRate;
 
   /* ---------- PLC variables ------------ */
-  int16_t lag0, i, k, noiseIndex;
+  size_t lag0, i, k;
+  int16_t noiseIndex;
   int16_t stretchPitchLP[PITCH_MAX_LAG + 10], stretchPitchLP1[PITCH_MAX_LAG + 10];
 
   int32_t gain_lo_hiQ17[2*SUBFRAMES];

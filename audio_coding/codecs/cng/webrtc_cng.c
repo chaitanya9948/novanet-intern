@@ -240,10 +240,12 @@ int16_t WebRtcCng_Encode(CNG_enc_inst* cng_inst, int16_t* speech,
   int16_t ReflBetaComp = 13107;  /* 0.4 in q15. */
   int32_t outEnergy;
   int outShifts;
-  int i, stab;
+  int stab;
+  size_t i;
   int acorrScale;
   int index;
-  int16_t ind, factor;
+  size_t ind;
+  int16_t factor;
   int32_t* bptr;
   int32_t blo, bhi;
   int16_t negate;
@@ -262,7 +264,7 @@ int16_t WebRtcCng_Encode(CNG_enc_inst* cng_inst, int16_t* speech,
     return -1;
   }
 
-  for (i = 0; i < nrOfSamples; i++) {
+  for (int i = 0; i < nrOfSamples; i++) {
     speechBuf[i] = speech[i];
   }
 
@@ -286,7 +288,7 @@ int16_t WebRtcCng_Encode(CNG_enc_inst* cng_inst, int16_t* speech,
   if (outEnergy > 1) {
     /* Create Hanning Window. */
     WebRtcSpl_GetHanningWindow(hanningW, nrOfSamples / 2);
-    for (i = 0; i < (nrOfSamples / 2); i++)
+    for (int i = 0; i < (nrOfSamples / 2); i++)
       hanningW[nrOfSamples - i - 1] = hanningW[i];
 
     WebRtcSpl_ElementwiseVectorMult(speechBuf, hanningW, speechBuf, nrOfSamples,
