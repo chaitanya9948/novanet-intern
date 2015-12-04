@@ -35,8 +35,8 @@ typedef struct WebRtcCngDecoder_ {
 } WebRtcCngDecoder;
 
 typedef struct WebRtcCngEncoder_ {
-  int16_t enc_nrOfCoefs;
-  uint16_t enc_sampfreq;
+  size_t enc_nrOfCoefs;
+  int enc_sampfreq;
   int16_t enc_interval;
   int16_t enc_msSinceSID;
   int32_t enc_Energy;

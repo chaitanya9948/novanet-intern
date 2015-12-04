@@ -485,12 +485,15 @@ int main(int argc, char* argv[]) {
 #endif
 
   // check stereo type
-  if (usingStereo) {
-    switch (usedCodec) {
+  if (usingStereo) 
+  {
+    switch (usedCodec)
+	 {
       // sample based codecs
       case webrtc::NetEqDecoder::kDecoderPCMu:
       case webrtc::NetEqDecoder::kDecoderPCMa:
-      case webrtc::NetEqDecoder::kDecoderG722: {
+      case webrtc::NetEqDecoder::kDecoderG722: 
+	  {
         // 1 octet per sample
         stereoMode = STEREO_MODE_SAMPLE_1;
         break;
@@ -505,7 +508,8 @@ int main(int argc, char* argv[]) {
       }
 
       // fixed-rate frame codecs (with internal VAD)
-      default: {
+      default:
+	   {
         printf("Cannot use codec %s as stereo codec\n", argv[4]);
         exit(0);
       }
@@ -514,16 +518,18 @@ int main(int argc, char* argv[]) {
 
   if ((usedCodec == webrtc::NetEqDecoder::kDecoderISAC) ||
       (usedCodec == webrtc::NetEqDecoder::kDecoderISACswb)) {
-    if (argc != 7) {
-      if (usedCodec == webrtc::NetEqDecoder::kDecoderISAC) {
-        bitrate = 32000;
-        printf("Running iSAC at default bitrate of 32000 bps (to specify "
-               "explicitly add the bps as last parameter)\n");
+    if (argc != 7) 
+	{
+      if (usedCodec == webrtc::NetEqDecoder::kDecoderISAC)
+	   {
+        bitrate = 32000;        
+		printf("Running iSAC at default bitrate of 32000 bps (to specify ""explicitly add the bps as last parameter)\n");
       } else  // (usedCodec==webrtc::kDecoderISACswb)
       {
         bitrate = 56000;
-        printf("Running iSAC at default bitrate of 56000 bps (to specify "
-               "explicitly add the bps as last parameter)\n");
+        printf(
+		"Running iSAC at default bitrate of 56000 bps (to specify "
+		"explicitly add the bps as last parameter)\n");
       }
     } else {
       bitrate = atoi(argv[6]);
@@ -542,9 +548,11 @@ int main(int argc, char* argv[]) {
           exit(0);
         }
       }
+        }
     }
-  } else {
-    if (argc == 7) {
+  else {
+    
+	if (argc == 7) {
       printf("Error: Bitrate parameter can only be specified for iSAC, G.723, "
              "and G.729.1\n");
       exit(0);
@@ -780,7 +788,8 @@ int main(int argc, char* argv[]) {
         if (usedCodec == webrtc::NetEqDecoder::kDecoderISAC) {
           assert(!usingStereo);  // Cannot handle stereo yet
           red_len[0] = WebRtcIsac_GetRedPayload(ISAC_inst[0], red_data);
-        } else {
+        } else 
+		{
 #endif
           memcpy(red_data, &rtp_data[RTPheaderLen + red_len[0]], enc_len);
           red_len[0] = red_len[1];
@@ -795,7 +804,8 @@ int main(int argc, char* argv[]) {
     /* read next frame */
     len = fread(org_data, 2, packet_size * numChannels, in_file) / numChannels;
     /* de-interleave if stereo */
-    if (usingStereo) {
+    if (usingStereo) 
+	{
       stereoDeInterleave(org_data, len * numChannels);
     }
 
@@ -890,11 +900,12 @@ int NetEQTest_init_coders(webrtc::NetEqDecoder coder,
                           size_t enc_frameSize,
                           int bitrate,
                           int sampfreq,
-                          int vad,
-                          size_t numChannels) {
+						  int vad,    
+						  size_t numChannels) {
   int ok = 0;
 
-  for (size_t k = 0; k < numChannels; k++) {
+  for (size_t k = 0; k < numChannels; k++) 
+  {
     VAD_inst[k] = WebRtcVad_Create();
     if (!VAD_inst[k]) {
       printf("Error: Couldn't allocate memory for VAD instance\n");
@@ -1212,9 +1223,8 @@ int NetEQTest_init_coders(webrtc::NetEqDecoder coder,
           if (ok != 0) {
             printf(
                 "Error: Couldn't allocate memory for AMR encoding instance\n");
-            exit(0);
-          }
-          if ((enc_frameSize == 160) || (enc_frameSize == 320) ||
+            exit(0);        
+		  }if ((enc_frameSize == 160) || (enc_frameSize == 320) ||
               (enc_frameSize == 480)) {
           } else {
             printf("\nError - AMR must have a multiple of 160 enc_frameSize\n");
@@ -1362,8 +1372,20 @@ int NetEQTest_init_coders(webrtc::NetEqDecoder coder,
           if (ok != 0) {
             printf("Error: Couldn't allocate memory for iSAC SWB instance\n");
             exit(0);
-          }
-          if (enc_frameSize == 960) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+       }if (enc_frameSize == 960) {
           } else {
             printf("\nError - iSAC SWB only supports frameSize 30 ms\n");
             exit(0);
@@ -1426,7 +1448,8 @@ int NetEQTest_init_coders(webrtc::NetEqDecoder coder,
 }
 
 int NetEQTest_free_coders(webrtc::NetEqDecoder coder, size_t numChannels) {
-  for (size_t k = 0; k < numChannels; k++) {
+  for (size_t k = 0; k < numChannels; k++) 
+  {
     WebRtcVad_Free(VAD_inst[k]);
 #if (defined(CODEC_CNGCODEC8) || defined(CODEC_CNGCODEC16) || \
      defined(CODEC_CNGCODEC32) || defined(CODEC_CNGCODEC48))
@@ -1629,7 +1652,8 @@ size_t NetEQTest_encode(webrtc::NetEqDecoder coder,
 #ifdef CODEC_G711
       cdlen = WebRtcG711_EncodeU(indata, frameLen, encoded);
 #endif
-    } else if (coder == webrtc::NetEqDecoder::kDecoderPCMa) { /*g711 A-law */
+  }
+ else if (coder == webrtc::NetEqDecoder::kDecoderPCMa) { /*g711 A-law */
 #ifdef CODEC_G711
       cdlen = WebRtcG711_EncodeA(indata, frameLen, encoded);
     }
@@ -1680,7 +1704,8 @@ size_t NetEQTest_encode(webrtc::NetEqDecoder coder,
       int noOfCalls = 0;
       int res = 0;
       while (res <= 0) {
-        res = WebRtcIsac_Encode(ISACSWB_inst[k], &indata[noOfCalls * 320],
+        res = WebRtcIsac_Encode(ISACSWB_inst[k], 
+		&indata[noOfCalls * 320],
                                 encoded);
         noOfCalls++;
       }
@@ -1722,7 +1747,8 @@ int makeRedundantHeader(unsigned char* rtp_data,
                         uint32_t* timestamp,
                         uint16_t* blockLen,
                         int seqNo,
-                        uint32_t ssrc) {
+                        uint32_t ssrc)
+						 {
   int i;
   unsigned char* rtpPointer;
   uint16_t offset;
@@ -1736,7 +1762,8 @@ int makeRedundantHeader(unsigned char* rtp_data,
   /* add one sub-header for each redundant payload (not the primary) */
   for (i = 0; i < numPayloads - 1; i++) {
     if (blockLen[i] > 0) {
-      offset = static_cast<uint16_t>(timestamp[numPayloads - 1] - timestamp[i]);
+      offset = static_cast<uint16_t>(
+	  timestamp[numPayloads - 1] - timestamp[i]);
 
       // Byte |0|       |1       2     |  3       |
       // Bit  |0|1234567|01234567012345|6701234567|
@@ -1781,7 +1808,8 @@ size_t makeDTMFpayload(unsigned char* payload_data,
   return (4);
 }
 
-void stereoDeInterleave(int16_t* audioSamples, size_t numSamples) {
+void stereoDeInterleave(int16_t* audioSamples, size_t numSamples) 
+{
   int16_t* tempVec;
   int16_t* readPtr, *writeL, *writeR;
 
@@ -1800,7 +1828,8 @@ void stereoDeInterleave(int16_t* audioSamples, size_t numSamples) {
   writeR = &audioSamples[numSamples / 2];
   readPtr = tempVec;
 
-  for (size_t k = 0; k < numSamples; k += 2) {
+  for (size_t k = 0; k < numSamples; k += 2) 
+    {
     *writeL = *readPtr;
     readPtr++;
     *writeR = *readPtr;
@@ -1812,35 +1841,40 @@ void stereoDeInterleave(int16_t* audioSamples, size_t numSamples) {
   free(tempVec);
 }
 
-void stereoInterleave(unsigned char* data, size_t dataLen, size_t stride) {
-  unsigned char* ptrL, *ptrR;
-  unsigned char temp[10];
+void stereoInterleave(unsigned char* data, size_t dataLen, size_t stride) 
+{
 
-  if (stride > 10) {
-    exit(0);
-  }
+    unsigned char *ptrL, *ptrR;
+    unsigned char temp[10];
 
-  if (dataLen % 1 != 0) {
-    // must be even number of samples
-    printf("Error: cannot interleave odd sample number\n");
-    exit(0);
-  }
+    if (stride > 10)
+    {
+        exit(0);
+    }
 
-  ptrL = data + stride;
-  ptrR = &data[dataLen / 2];
+    if (dataLen%1 != 0)
+    {
+        // must be even number of samples
+        printf("Error: cannot interleave odd sample number\n");
+        exit(0);
+    }
 
-  while (ptrL < ptrR) {
-    // copy from right pointer to temp
-    memcpy(temp, ptrR, stride);
+    ptrL = data + stride;
+    ptrR = &data[dataLen/2];
 
-    // shift data between pointers
-    memmove(ptrL + stride, ptrL, ptrR - ptrL);
+    while (ptrL < ptrR) {
+        // copy from right pointer to temp
+        memcpy(temp, ptrR, stride);
 
-    // copy from temp to left pointer
-    memcpy(ptrL, temp, stride);
+        // shift data between pointers
+        memmove(ptrL + stride, ptrL, ptrR - ptrL);
 
-    // advance pointers
-    ptrL += stride * 2;
-    ptrR += stride;
-  }
+        // copy from temp to left pointer
+        memcpy(ptrL, temp, stride);
+
+        // advance pointers
+        ptrL += stride*2;
+        ptrR += stride;
+    }
+
 }
