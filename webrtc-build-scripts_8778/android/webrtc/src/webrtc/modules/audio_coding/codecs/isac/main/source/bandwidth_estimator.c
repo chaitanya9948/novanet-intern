@@ -773,7 +773,7 @@ WebRtcIsac_GetUplinkBandwidth(
     const BwEstimatorstr* bwest_str,
     int32_t*          bitRate)
 {
-  if(best_str->external_bw_info.in_use)
+  if(bwest_str->external_bw_info.in_use)
   {
     *bitRate = bwest_str->external_bw_info.send_bw_avg;
   }
@@ -831,7 +831,7 @@ void WebRtcIsacBw_GetBandwidthInfo(BwEstimatorstr* bwest_str,
                                    IsacBandwidthInfo* bwinfo) {
   assert(!bwest_str->external_bw_info.in_use);
   bwinfo->in_use = 1;
-  bwinfo->send_bw_avg = WebRtcIsac_GetUplinkBandwidth(bwest_str);
+  WebRtcIsac_GetUplinkBandwidth(bwest_str,&( bwinfo->send_bw_avg));
   bwinfo->send_max_delay_avg = WebRtcIsac_GetUplinkMaxDelay(bwest_str);
   WebRtcIsac_GetDownlinkBwJitIndexImpl(bwest_str, &bwinfo->bottleneck_idx,
                                        &bwinfo->jitter_info,

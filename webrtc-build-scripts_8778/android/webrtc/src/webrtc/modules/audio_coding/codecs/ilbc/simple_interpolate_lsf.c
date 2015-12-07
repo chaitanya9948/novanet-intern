@@ -45,7 +45,7 @@ void WebRtcIlbcfix_SimpleInterpolateLsf(
     IlbcEncoder *iLBCenc_inst
     /* (i/o) the encoder state structure */
                                         ) {
-  size_t i;
+  int i;
   int pos, lp_length;
 
   int16_t *lsf2, *lsfdeq2;
