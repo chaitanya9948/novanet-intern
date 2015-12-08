@@ -38,12 +38,7 @@ AudioEncoderPcm16B::Config CreateConfig(const CodecInst& codec_inst) {
 }
 }  // namespace
 
-bool AudioEncoderPcm16B::Config::IsOk() const {
-  if ((sample_rate_hz != 8000) && (sample_rate_hz != 16000) &&
-      (sample_rate_hz != 32000) && (sample_rate_hz != 48000))
-    return false;
-  return AudioEncoderPcm::Config::IsOk();
-}
+
 
 AudioEncoderPcm16B::AudioEncoderPcm16B(const CodecInst& codec_inst)
     : AudioEncoderPcm16B(CreateConfig(codec_inst)) {}

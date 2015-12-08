@@ -22,7 +22,7 @@ namespace webrtc {
 // underlying AudioEncoder object that performs the actual encodings. The
 // current class will gather the two latest encodings from the underlying codec
 // into one packet.
-class AudioEncoderCopyRed : public AudioEncoder {
+class AudioEncoderCopyRed final : public AudioEncoder {
  public:
   struct Config {
    public:
@@ -42,7 +42,8 @@ class AudioEncoderCopyRed : public AudioEncoder {
   int Num10MsFramesInNextPacket() const override;
   int Max10MsFramesInAPacket() const override;
   void SetTargetBitrate(int bits_per_second) override;
-  void SetProjectedPacketLossRate(double fraction) override;
+  void SetProjectedPacketLossRate(double fraction) override; 
+  // int GetTargetBitrate() const override;
 
  protected:
   void EncodeInternal(uint32_t rtp_timestamp,
@@ -57,6 +58,7 @@ class AudioEncoderCopyRed : public AudioEncoder {
   rtc::scoped_ptr<uint8_t[]> secondary_encoded_;
   size_t secondary_allocated_;
   EncodedInfoLeaf secondary_info_;
+  DISALLOW_COPY_AND_ASSIGN(AudioEncoderCopyRed);
 };
 
 }  // namespace webrtc

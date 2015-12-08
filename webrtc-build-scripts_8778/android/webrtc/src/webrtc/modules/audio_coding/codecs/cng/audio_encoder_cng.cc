@@ -98,6 +98,9 @@ int AudioEncoderCng::Num10MsFramesInNextPacket() const {
 int AudioEncoderCng::Max10MsFramesInAPacket() const {
   return speech_encoder_->Max10MsFramesInAPacket();
 }
+// int AudioEncoderCng::GetTargetBitrate() const {
+//   return speech_encoder_->GetTargetBitrate();
+// }
 
 void AudioEncoderCng::SetTargetBitrate(int bits_per_second) {
   speech_encoder_->SetTargetBitrate(bits_per_second);

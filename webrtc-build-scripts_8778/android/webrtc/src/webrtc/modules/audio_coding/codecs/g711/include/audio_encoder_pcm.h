@@ -13,6 +13,7 @@
 
 #include <vector>
 
+#include "webrtc/base/scoped_ptr.h"
 #include "webrtc/modules/audio_coding/codecs/audio_encoder.h"
 
 namespace webrtc {
@@ -21,6 +22,8 @@ class AudioEncoderPcm : public AudioEncoder {
  public:
   struct Config {
    public:
+    bool IsOk() const;
+
     int frame_size_ms;
     int num_channels;
     int payload_type;
@@ -35,6 +38,7 @@ class AudioEncoderPcm : public AudioEncoder {
   int SampleRateHz() const override;
   int NumChannels() const override;
   size_t MaxEncodedBytes() const override;
+  // int GetTargetBitrate() const override;
   int Num10MsFramesInNextPacket() const override;
   int Max10MsFramesInAPacket() const override;
 
@@ -47,9 +51,11 @@ class AudioEncoderPcm : public AudioEncoder {
                       uint8_t* encoded,
                       EncodedInfo* info) override;
 
-  virtual int16_t EncodeCall(const int16_t* audio,
+  virtual size_t EncodeCall(const int16_t* audio,
                              size_t input_len,
                              uint8_t* encoded) = 0;
+
+  virtual int BytesPerSample() const = 0;
 
  private:
   const int sample_rate_hz_;
@@ -61,7 +67,9 @@ class AudioEncoderPcm : public AudioEncoder {
   uint32_t first_timestamp_in_buffer_;
 };
 
-class AudioEncoderPcmA : public AudioEncoderPcm {
+struct CodecInst;
+
+class AudioEncoderPcmA final : public AudioEncoderPcm {
  public:
   struct Config : public AudioEncoderPcm::Config {
     Config() : AudioEncoderPcm::Config(8) {}
@@ -69,17 +77,21 @@ class AudioEncoderPcmA : public AudioEncoderPcm {
 
   explicit AudioEncoderPcmA(const Config& config)
       : AudioEncoderPcm(config, kSampleRateHz) {}
+  explicit AudioEncoderPcmA(const CodecInst& codec_inst);
 
  protected:
-  int16_t EncodeCall(const int16_t* audio,
+  size_t EncodeCall(const int16_t* audio,
                      size_t input_len,
                      uint8_t* encoded) override;
 
+  int BytesPerSample() const override;
+
  private:
   static const int kSampleRateHz = 8000;
+  DISALLOW_COPY_AND_ASSIGN(AudioEncoderPcmA);
 };
 
-class AudioEncoderPcmU : public AudioEncoderPcm {
+class AudioEncoderPcmU final : public AudioEncoderPcm {
  public:
   struct Config : public AudioEncoderPcm::Config {
     Config() : AudioEncoderPcm::Config(0) {}
@@ -87,15 +99,20 @@ class AudioEncoderPcmU : public AudioEncoderPcm {
 
   explicit AudioEncoderPcmU(const Config& config)
       : AudioEncoderPcm(config, kSampleRateHz) {}
+  explicit AudioEncoderPcmU(const CodecInst& codec_inst);
 
  protected:
-  int16_t EncodeCall(const int16_t* audio,
+  size_t EncodeCall(const int16_t* audio,
                      size_t input_len,
                      uint8_t* encoded) override;
 
+  int BytesPerSample() const override;
+
  private:
   static const int kSampleRateHz = 8000;
+  DISALLOW_COPY_AND_ASSIGN(AudioEncoderPcmU);
 };
 
 }  // namespace webrtc
+
 #endif  // WEBRTC_MODULES_AUDIO_CODING_CODECS_G711_INCLUDE_AUDIO_ENCODER_PCM_H_

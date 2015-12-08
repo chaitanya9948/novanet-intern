@@ -8,6 +8,10 @@
  *  be found in the AUTHORS file in the root of the source tree.
  */
 
+/*
+*******Changed By Rishabh *******************
+*/
+
 #include <vector>
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -93,7 +97,7 @@ class MockEncodeHelper {
       CHECK_LE(info_.encoded_bytes, max_encoded_bytes);
       memcpy(encoded, payload_, info_.encoded_bytes);
     }
-    CHECK(info);
+    //CHECK(info);
     *info = info_;
   }
 
@@ -117,12 +121,12 @@ TEST_F(AudioEncoderCopyRedTest, CheckNumChannelsPropagation) {
 
 TEST_F(AudioEncoderCopyRedTest, CheckFrameSizePropagation) {
   EXPECT_CALL(mock_encoder_, Num10MsFramesInNextPacket()).WillOnce(Return(17));
-  EXPECT_EQ(17, red_->Num10MsFramesInNextPacket());
+  EXPECT_EQ(17U, red_->Num10MsFramesInNextPacket());
 }
 
 TEST_F(AudioEncoderCopyRedTest, CheckMaxFrameSizePropagation) {
   EXPECT_CALL(mock_encoder_, Max10MsFramesInAPacket()).WillOnce(Return(17));
-  EXPECT_EQ(17, red_->Max10MsFramesInAPacket());
+  EXPECT_EQ(17U, red_->Max10MsFramesInAPacket());
 }
 
 TEST_F(AudioEncoderCopyRedTest, CheckSetBitratePropagation) {
@@ -153,7 +157,7 @@ TEST_F(AudioEncoderCopyRedTest, CheckImmediateEncode) {
 
 // Checks that no output is produced if the underlying codec doesn't emit any
 // new data, even if the RED codec is loaded with a secondary encoding.
-TEST_F(AudioEncoderCopyRedTest, CheckNoOuput) {
+TEST_F(AudioEncoderCopyRedTest, CheckNoOutput) {
   // Start with one Encode() call that will produce output.
   static const size_t kEncodedSize = 17;
   AudioEncoder::EncodedInfo info;

@@ -53,6 +53,7 @@ class AudioEncoderCng final : public AudioEncoder {
   int Num10MsFramesInNextPacket() const override;
   int Max10MsFramesInAPacket() const override;
   void SetTargetBitrate(int bits_per_second) override;
+  // int GetTargetBitrate() const override;
   void SetProjectedPacketLossRate(double fraction) override;
 
  protected:

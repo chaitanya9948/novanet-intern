@@ -63,6 +63,19 @@ int AudioEncoderIlbc::Max10MsFramesInAPacket() const {
   return num_10ms_frames_per_packet_;
 }
 
+// int AudioEncoderIlbc::GetTargetBitrate() const {
+//   switch (num_10ms_frames_per_packet_) {
+//     case 2: case 4:
+//       // 38 bytes per frame of 20 ms => 15200 bits/s.
+//       return 15200;
+//     case 3: case 6:
+//       // 50 bytes per frame of 30 ms => (approx) 13333 bits/s.
+//       return 13333;
+//     default:
+//       FATAL();
+//   }
+// }
+
 void AudioEncoderIlbc::EncodeInternal(uint32_t rtp_timestamp,
                                       const int16_t* audio,
                                       size_t max_encoded_bytes,

@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.
  *
@@ -50,9 +51,13 @@ int AudioEncoderCopyRed::Max10MsFramesInAPacket() const {
   return speech_encoder_->Max10MsFramesInAPacket();
 }
 
-void AudioEncoderCopyRed::SetTargetBitrate(int bits_per_second) {
+/*void AudioEncoderCopyRed::SetTargetBitrate(int bits_per_second) cons {
   speech_encoder_->SetTargetBitrate(bits_per_second);
-}
+}*/
+
+// int AudioEncoderCopyRed::GetTargetBitrate() const {
+//   return speech_encoder_->GetTargetBitrate();
+// }
 
 void AudioEncoderCopyRed::SetProjectedPacketLossRate(double fraction) {
   DCHECK_GE(fraction, 0.0);
@@ -102,6 +107,10 @@ void AudioEncoderCopyRed::EncodeInternal(uint32_t rtp_timestamp,
        it != info->redundant.end(); ++it) {
     info->encoded_bytes += it->encoded_bytes;
   }
+}
+
+void AudioEncoderCopyRed::SetTargetBitrate(int bits_per_second) {
+  speech_encoder_->SetTargetBitrate(bits_per_second);
 }
 
 }  // namespace webrtc

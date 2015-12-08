@@ -21,7 +21,7 @@ namespace webrtc {
 // NOTE: This class has neither ThreadChecker, nor locks. The owner of an
 // AudioEncoderOpus object must ensure that it is not accessed concurrently.
 
-class AudioEncoderOpus final : public AudioEncoder {
+class AudioEncoderOpus : public AudioEncoder {
  public:
   enum ApplicationMode {
     kVoip = 0,
@@ -52,6 +52,7 @@ class AudioEncoderOpus final : public AudioEncoder {
   int Max10MsFramesInAPacket() const override;
   void SetTargetBitrate(int bits_per_second) override;
   void SetProjectedPacketLossRate(double fraction) override;
+  // int GetTargetBitrate() const override;
 
   double packet_loss_rate() const { return packet_loss_rate_; }
   ApplicationMode application() const { return application_; }
@@ -68,6 +69,7 @@ class AudioEncoderOpus final : public AudioEncoder {
   const int num_10ms_frames_per_packet_;
   const int num_channels_;
   const int payload_type_;
+  //int Num10msFramesPerPacket() const;
   const ApplicationMode application_;
   int bitrate_bps_;
   const bool dtx_enabled_;
@@ -76,6 +78,7 @@ class AudioEncoderOpus final : public AudioEncoder {
   OpusEncInst* inst_;
   uint32_t first_timestamp_in_buffer_;
   double packet_loss_rate_;
+  //DISALLOW_COPY_AND_ASSIGN(AudioEncoderOpus);
 };
 
 }  // namespace webrtc

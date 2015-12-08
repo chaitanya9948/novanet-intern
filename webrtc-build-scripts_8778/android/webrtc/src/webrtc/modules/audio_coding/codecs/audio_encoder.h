@@ -54,7 +54,7 @@ class AudioEncoder {
     std::vector<EncodedInfoLeaf> redundant;
   };
 
-  virtual ~AudioEncoder() {}
+  virtual ~AudioEncoder() = default;
 
   // Accepts one 10 ms block of input audio (i.e., sample_rate_hz() / 100 *
   // num_channels() samples). Multi-channel audio must be sample-interleaved.
@@ -93,6 +93,10 @@ class AudioEncoder {
   // the preceding packet.
   virtual int Num10MsFramesInNextPacket() const = 0;
 
+  // Returns the current target bitrate in bits/s. The value -1 means that the
+  // codec adapts the target automatically, and a current target cannot be
+  // provided.
+  // virtual int GetTargetBitrate() const = 0;
   // Returns the maximum value that can be returned by
   // Num10MsFramesInNextPacket().
   virtual int Max10MsFramesInAPacket() const = 0;

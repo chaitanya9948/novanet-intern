@@ -36,7 +36,7 @@ class AudioEncoderG722 : public AudioEncoder {
   int RtpTimestampRateHz() const override;
   int Num10MsFramesInNextPacket() const override;
   int Max10MsFramesInAPacket() const override;
-
+  // int GetTargetBitrate() const override;
  protected:
   void EncodeInternal(uint32_t rtp_timestamp,
                       const int16_t* audio,

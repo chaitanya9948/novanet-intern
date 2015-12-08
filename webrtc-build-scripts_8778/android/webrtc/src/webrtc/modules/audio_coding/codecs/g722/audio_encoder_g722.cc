@@ -77,6 +77,11 @@ int AudioEncoderG722::Max10MsFramesInAPacket() const {
   return num_10ms_frames_per_packet_;
 }
 
+// int AudioEncoderG722::GetTargetBitrate() const {
+//   // 4 bits/sample, 16000 samples/s/channel.
+//   return 64000 * NumChannels();
+// }
+
 void AudioEncoderG722::EncodeInternal(uint32_t rtp_timestamp,
                                       const int16_t* audio,
                                       size_t max_encoded_bytes,

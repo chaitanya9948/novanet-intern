@@ -36,13 +36,15 @@ class AudioEncoderIlbc : public AudioEncoder {
   size_t MaxEncodedBytes() const override;
   int Num10MsFramesInNextPacket() const override;
   int Max10MsFramesInAPacket() const override;
-
+  // int GetTargetBitrate() const override;
+  
  protected:
   void EncodeInternal(uint32_t rtp_timestamp,
                       const int16_t* audio,
                       size_t max_encoded_bytes,
                       uint8_t* encoded,
                       EncodedInfo* info) override;
+ DISALLOW_COPY_AND_ASSIGN(AudioEncoderIlbc);
 
  private:
   size_t RequiredOutputSizeBytes() const;

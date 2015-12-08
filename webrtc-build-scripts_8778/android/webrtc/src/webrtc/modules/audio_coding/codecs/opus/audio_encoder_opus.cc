@@ -93,7 +93,7 @@ AudioEncoderOpus::AudioEncoderOpus(const Config& config)
   CHECK_EQ(0,
            WebRtcOpus_SetMaxPlaybackRate(inst_, config.max_playback_rate_hz));
   CHECK_EQ(0, WebRtcOpus_SetComplexity(inst_, config.complexity));
-  if (config.dtx_enabled) {
+  if (config.dtx_enabled){
     CHECK_EQ(0, WebRtcOpus_EnableDtx(inst_));
   } else {
     CHECK_EQ(0, WebRtcOpus_DisableDtx(inst_));
@@ -122,9 +122,19 @@ size_t AudioEncoderOpus::MaxEncodedBytes() const {
   return 2 * approx_encoded_bytes;
 }
 
+/*
+int AudioEncoderOpus::Num10msFramesPerPacket() const {
+  return rtc::CheckedDivExact(Config.frame_size_ms, 10);
+}
+*/
+
 int AudioEncoderOpus::Num10MsFramesInNextPacket() const {
   return num_10ms_frames_per_packet_;
 }
+
+// int AudioEncoderOpus::GetTargetBitrate() const {
+//   return bitrate_bps_;
+// }
 
 int AudioEncoderOpus::Max10MsFramesInAPacket() const {
   return num_10ms_frames_per_packet_;
