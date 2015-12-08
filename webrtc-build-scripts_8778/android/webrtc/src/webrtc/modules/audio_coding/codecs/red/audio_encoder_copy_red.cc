@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.
  *
@@ -8,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/*
+******************Changed By Rishabh**********************************
+*/
 #include "webrtc/modules/audio_coding/codecs/red/audio_encoder_copy_red.h"
 
 #include <string.h>
@@ -24,23 +25,22 @@ AudioEncoderCopyRed::AudioEncoderCopyRed(const Config& config)
   CHECK(speech_encoder_) << "Speech encoder not provided.";
 }
 
-AudioEncoderCopyRed::~AudioEncoderCopyRed() {
+AudioEncoderCopyRed::~AudioEncoderCopyRed() = default;
+
+size_t AudioEncoderCopyRed::MaxEncodedBytes() const {
+  return 2 * speech_encoder_->MaxEncodedBytes();
 }
 
 int AudioEncoderCopyRed::SampleRateHz() const {
   return speech_encoder_->SampleRateHz();
 }
 
-int AudioEncoderCopyRed::RtpTimestampRateHz() const {
-  return speech_encoder_->RtpTimestampRateHz();
-}
-
 int AudioEncoderCopyRed::NumChannels() const {
   return speech_encoder_->NumChannels();
 }
 
-size_t AudioEncoderCopyRed::MaxEncodedBytes() const {
-  return 2 * speech_encoder_->MaxEncodedBytes();
+int AudioEncoderCopyRed::RtpTimestampRateHz() const {
+  return speech_encoder_->RtpTimestampRateHz();
 }
 
 int AudioEncoderCopyRed::Num10MsFramesInNextPacket() const {
@@ -50,21 +50,6 @@ int AudioEncoderCopyRed::Num10MsFramesInNextPacket() const {
 int AudioEncoderCopyRed::Max10MsFramesInAPacket() const {
   return speech_encoder_->Max10MsFramesInAPacket();
 }
-
-/*void AudioEncoderCopyRed::SetTargetBitrate(int bits_per_second) cons {
-  speech_encoder_->SetTargetBitrate(bits_per_second);
-}*/
-
-// int AudioEncoderCopyRed::GetTargetBitrate() const {
-//   return speech_encoder_->GetTargetBitrate();
-// }
-
-void AudioEncoderCopyRed::SetProjectedPacketLossRate(double fraction) {
-  DCHECK_GE(fraction, 0.0);
-  DCHECK_LE(fraction, 1.0);
-  speech_encoder_->SetProjectedPacketLossRate(fraction);
-}
-
 void AudioEncoderCopyRed::EncodeInternal(uint32_t rtp_timestamp,
                                          const int16_t* audio,
                                          size_t max_encoded_bytes,
@@ -108,6 +93,13 @@ void AudioEncoderCopyRed::EncodeInternal(uint32_t rtp_timestamp,
     info->encoded_bytes += it->encoded_bytes;
   }
 }
+
+void AudioEncoderCopyRed::SetProjectedPacketLossRate(double fraction) {
+  //DCHECK_GE(fraction, 0.0);
+  //DCHECK_LE(fraction, 1.0);
+  speech_encoder_->SetProjectedPacketLossRate(fraction);
+}
+
 
 void AudioEncoderCopyRed::SetTargetBitrate(int bits_per_second) {
   speech_encoder_->SetTargetBitrate(bits_per_second);

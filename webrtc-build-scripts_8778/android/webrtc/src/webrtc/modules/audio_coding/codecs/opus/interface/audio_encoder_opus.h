@@ -7,21 +7,24 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/*
+****************Changed By Rishabh*****************
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_CODECS_OPUS_INTERFACE_AUDIO_ENCODER_OPUS_H_
 #define WEBRTC_MODULES_AUDIO_CODING_CODECS_OPUS_INTERFACE_AUDIO_ENCODER_OPUS_H_
 
 #include <vector>
 
+#include "webrtc/base/constructormagic.h"
 #include "webrtc/modules/audio_coding/codecs/opus/interface/opus_interface.h"
 #include "webrtc/modules/audio_coding/codecs/audio_encoder.h"
 
 namespace webrtc {
 
-// NOTE: This class has neither ThreadChecker, nor locks. The owner of an
-// AudioEncoderOpus object must ensure that it is not accessed concurrently.
+struct CodecInst;
 
-class AudioEncoderOpus : public AudioEncoder {
+// NOTE: This class has neither ThreadChecker, nor locks. The owner of an
+class AudioEncoderOpus final : public AudioEncoder {
  public:
   enum ApplicationMode {
     kVoip = 0,
@@ -29,20 +32,30 @@ class AudioEncoderOpus : public AudioEncoder {
   };
 
   struct Config {
-    Config();
+    //Config();
     bool IsOk() const;
-    int frame_size_ms;
-    int num_channels;
-    int payload_type;
-    ApplicationMode application;
-    int bitrate_bps;
-    bool fec_enabled;
-    int max_playback_rate_hz;
-    int complexity;
-    bool dtx_enabled;
+    int frame_size_ms = 20;
+    int num_channels = 1;
+    int payload_type = 120;
+    ApplicationMode application = kVoip;
+    int bitrate_bps = 64000;
+    bool fec_enabled = false;
+    int max_playback_rate_hz = 48000;
+    int complexity = kDefaultComplexity;
+    bool dtx_enabled = false;
+
+   private:
+#if defined(WEBRTC_ANDROID) || defined(WEBRTC_IOS) || defined(WEBRTC_ARCH_ARM)
+    // If we are on Android, iOS and/or ARM, use a lower complexity setting as
+    // default, to save encoder complexity.
+    static const int kDefaultComplexity = 5;
+#else
+    static const int kDefaultComplexity = 9;
+#endif
   };
 
   explicit AudioEncoderOpus(const Config& config);
+  explicit AudioEncoderOpus(const CodecInst& codec_inst);
   ~AudioEncoderOpus() override;
 
   int SampleRateHz() const override;
@@ -69,16 +82,15 @@ class AudioEncoderOpus : public AudioEncoder {
   const int num_10ms_frames_per_packet_;
   const int num_channels_;
   const int payload_type_;
-  //int Num10msFramesPerPacket() const;
   const ApplicationMode application_;
   int bitrate_bps_;
   const bool dtx_enabled_;
   const int samples_per_10ms_frame_;
+	double packet_loss_rate_;
   std::vector<int16_t> input_buffer_;
   OpusEncInst* inst_;
   uint32_t first_timestamp_in_buffer_;
-  double packet_loss_rate_;
-  //DISALLOW_COPY_AND_ASSIGN(AudioEncoderOpus);
+  DISALLOW_COPY_AND_ASSIGN(AudioEncoderOpus);
 };
 
 }  // namespace webrtc

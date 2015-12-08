@@ -7,9 +7,14 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+/*
+****************Changed By Rishabh*****************
+*/
 
 #ifndef WEBRTC_MODULES_AUDIO_CODING_CODECS_OPUS_INTERFACE_OPUS_INTERFACE_H_
 #define WEBRTC_MODULES_AUDIO_CODING_CODECS_OPUS_INTERFACE_OPUS_INTERFACE_H_
+
+#include <stddef.h>
 
 #include "webrtc/typedefs.h"
 
@@ -293,6 +298,20 @@ int16_t WebRtcOpus_DecodeFec(OpusDecInst* inst, const uint8_t* encoded,
 int WebRtcOpus_DurationEst(OpusDecInst* inst,
                            const uint8_t* payload,
                            int payload_length_bytes);
+
+/****************************************************************************
+ * WebRtcOpus_PlcDuration(...)
+ *
+ * This function calculates the duration of a frame returned by packet loss
+ * concealment (PLC).
+ *
+ * Input:
+ *        - inst                 : Decoder context
+ *
+ * Return value                  : The duration of a frame returned by PLC, in
+ *                                 samples per channel.
+ */
+int WebRtcOpus_PlcDuration(OpusDecInst* inst);
 
 /* TODO(minyue): Check whether it is needed to add a decoder context to the
  * arguments, like WebRtcOpus_DurationEst(...). In fact, the packet itself tells

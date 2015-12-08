@@ -7,31 +7,35 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/*
+****************Changed By Rishabh*****************
+*/
 #include "webrtc/modules/audio_coding/codecs/opus/interface/audio_encoder_opus.h"
 
 #include "webrtc/base/checks.h"
+#include "webrtc/base/safe_conversions.h"
+#include "webrtc/common_types.h"
 #include "webrtc/modules/audio_coding/codecs/opus/interface/opus_interface.h"
 
 namespace webrtc {
 
 namespace {
 
+// We always encode at 48 kHz.
+const int kSampleRateHz = 48000;
 const int kMinBitrateBps = 500;
 const int kMaxBitrateBps = 512000;
 
-// TODO(tlegrand): Remove this code when we have proper APIs to set the
-// complexity at a higher level.
-#if defined(WEBRTC_ANDROID) || defined(WEBRTC_IOS) || defined(WEBRTC_ARCH_ARM)
-// If we are on Android, iOS and/or ARM, use a lower complexity setting as
-// default, to save encoder complexity.
-const int kDefaultComplexity = 5;
-#else
-const int kDefaultComplexity = 9;
-#endif
-
-// We always encode at 48 kHz.
-const int kSampleRateHz = 48000;
+AudioEncoderOpus::Config CreateConfig(const CodecInst& codec_inst) {
+  AudioEncoderOpus::Config config;
+  config.frame_size_ms = rtc::CheckedDivExact(codec_inst.pacsize, 48);
+  config.num_channels = codec_inst.channels;
+  config.bitrate_bps = codec_inst.rate;
+  config.payload_type = codec_inst.pltype;
+  config.application = config.num_channels == 1 ? AudioEncoderOpus::kVoip
+                                                : AudioEncoderOpus::kAudio;
+  return config;
+}
 
 int16_t ClampInt16(size_t x) {
   return static_cast<int16_t>(
@@ -45,18 +49,6 @@ int16_t CastInt16(size_t x) {
 
 }  // namespace
 
-AudioEncoderOpus::Config::Config()
-    : frame_size_ms(20),
-      num_channels(1),
-      payload_type(120),
-      application(kVoip),
-      bitrate_bps(64000),
-      fec_enabled(false),
-      max_playback_rate_hz(48000),
-      complexity(kDefaultComplexity),
-      dtx_enabled(false) {
-}
-
 bool AudioEncoderOpus::Config::IsOk() const {
   if (frame_size_ms <= 0 || frame_size_ms % 10 != 0)
     return false;
@@ -66,8 +58,8 @@ bool AudioEncoderOpus::Config::IsOk() const {
     return false;
   if (complexity < 0 || complexity > 10)
     return false;
-  if (dtx_enabled && application != kVoip)
-    return false;
+  /*if (dtx_enabled && application != kVoip)
+    return false;*/
   return true;
 }
 
@@ -82,9 +74,11 @@ AudioEncoderOpus::AudioEncoderOpus(const Config& config)
                               num_channels_),
       packet_loss_rate_(0.0) {
   CHECK(config.IsOk());
+  input_buffer_.clear();
   input_buffer_.reserve(num_10ms_frames_per_packet_ * samples_per_10ms_frame_);
   CHECK_EQ(0, WebRtcOpus_EncoderCreate(&inst_, num_channels_, application_));
   SetTargetBitrate(config.bitrate_bps);
+  CHECK_EQ(0, WebRtcOpus_SetBitRate(inst_, config.bitrate_bps));
   if (config.fec_enabled) {
     CHECK_EQ(0, WebRtcOpus_EnableFec(inst_));
   } else {
@@ -99,6 +93,9 @@ AudioEncoderOpus::AudioEncoderOpus(const Config& config)
     CHECK_EQ(0, WebRtcOpus_DisableDtx(inst_));
   }
 }
+
+AudioEncoderOpus::AudioEncoderOpus(const CodecInst& codec_inst)
+    : AudioEncoderOpus(CreateConfig(codec_inst)) {}
 
 AudioEncoderOpus::~AudioEncoderOpus() {
   CHECK_EQ(0, WebRtcOpus_EncoderFree(inst_));
