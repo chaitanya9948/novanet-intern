@@ -136,7 +136,7 @@ int16_t WebRtcOpus_Encode(OpusEncInst* inst,
   }
 
   res = opus_encode(inst->encoder,
-                    (const opus_int16*)use_buffer ? buffer : audio_in,
+                    (const opus_int16* )(use_buffer ? buffer : audio_in),
                     samples,
                     encoded,
                     length_encoded_buffer);
