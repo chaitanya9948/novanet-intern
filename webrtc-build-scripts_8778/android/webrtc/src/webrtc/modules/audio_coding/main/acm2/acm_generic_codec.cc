@@ -25,7 +25,7 @@
 #include "webrtc/modules/audio_coding/codecs/isac/fix/interface/audio_encoder_isacfix.h"
 #include "webrtc/modules/audio_coding/codecs/isac/main/interface/audio_encoder_isac.h"
 #include "webrtc/modules/audio_coding/codecs/opus/interface/audio_encoder_opus.h"
-#include "webrtc/modules/audio_coding/codecs/pcm16b/include/audio_encoder_pcm16b.h"
+#include "webrtc/modules/audio_coding/codecs/pcm16b/audio_encoder_pcm16b.h"
 #include "webrtc/modules/audio_coding/codecs/red/audio_encoder_copy_red.h"
 #include "webrtc/modules/audio_coding/main/acm2/acm_codec_database.h"
 #include "webrtc/modules/audio_coding/main/acm2/acm_common_defs.h"

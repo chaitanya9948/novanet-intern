@@ -7,6 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+/*
+*********************Changed By Rishabh******************************
+*/
 
 #ifndef WEBRTC_MODULES_AUDIO_CODING_CODECS_AUDIO_ENCODER_H_
 #define WEBRTC_MODULES_AUDIO_CODING_CODECS_AUDIO_ENCODER_H_
@@ -23,18 +26,11 @@ namespace webrtc {
 class AudioEncoder {
  public:
   struct EncodedInfoLeaf {
-    EncodedInfoLeaf()
-        : encoded_bytes(0),
-          encoded_timestamp(0),
-          payload_type(0),
-          send_even_if_empty(false),
-          speech(true) {}
-
-    size_t encoded_bytes;
-    uint32_t encoded_timestamp;
-    int payload_type;
-    bool send_even_if_empty;
-    bool speech;
+    size_t encoded_bytes = 0;
+    uint32_t encoded_timestamp = 0;
+    int payload_type = 0;
+    bool send_even_if_empty = false;
+    bool speech = true;
   };
 
   // This is the main struct for auxiliary encoding information. Each encoded

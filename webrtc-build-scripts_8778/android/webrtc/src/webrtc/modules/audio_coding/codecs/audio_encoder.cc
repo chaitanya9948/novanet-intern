@@ -7,16 +7,20 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/*
+*********************Changed By Rishabh******************************
+*/
 #include "webrtc/modules/audio_coding/codecs/audio_encoder.h"
 #include "webrtc/base/checks.h"
 
 namespace webrtc {
 
-AudioEncoder::EncodedInfo::EncodedInfo() : EncodedInfoLeaf() {
-}
+AudioEncoder::EncodedInfo::EncodedInfo() = default;
 
-AudioEncoder::EncodedInfo::~EncodedInfo() {
+AudioEncoder::EncodedInfo::~EncodedInfo() = default;
+
+int AudioEncoder::RtpTimestampRateHz() const {
+  return SampleRateHz();
 }
 
 void AudioEncoder::Encode(uint32_t rtp_timestamp,
@@ -26,13 +30,9 @@ void AudioEncoder::Encode(uint32_t rtp_timestamp,
                           uint8_t* encoded,
                           EncodedInfo* info) {
   CHECK_EQ(num_samples_per_channel,
-           static_cast<size_t>(SampleRateHz() / 100));
+           static_cast<size_t>(NumChannels() * SampleRateHz() / 100));
   EncodeInternal(rtp_timestamp, audio, max_encoded_bytes, encoded, info);
   CHECK_LE(info->encoded_bytes, max_encoded_bytes);
-}
-
-int AudioEncoder::RtpTimestampRateHz() const {
-  return SampleRateHz();
 }
 
 }  // namespace webrtc

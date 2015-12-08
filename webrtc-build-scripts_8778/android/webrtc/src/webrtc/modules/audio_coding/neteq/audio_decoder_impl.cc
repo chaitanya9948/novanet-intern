@@ -32,7 +32,7 @@
 #include "webrtc/modules/audio_coding/codecs/opus/interface/opus_interface.h"
 #endif
 #ifdef WEBRTC_CODEC_PCM16
-#include "webrtc/modules/audio_coding/codecs/pcm16b/include/pcm16b.h"
+#include "webrtc/modules/audio_coding/codecs/pcm16b/pcm16b.h"
 #endif
 
 namespace webrtc {

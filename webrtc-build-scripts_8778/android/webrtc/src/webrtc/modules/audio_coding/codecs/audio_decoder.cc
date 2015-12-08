@@ -8,6 +8,9 @@
  *  be found in the AUTHORS file in the root of the source tree.
  */
 
+/*
+*********************Changed By Rishabh******************************
+*/
 #include "webrtc/modules/audio_coding/codecs/audio_decoder.h"
 
 #include <assert.h>
@@ -20,7 +23,7 @@ int AudioDecoder::Decode(const uint8_t* encoded, size_t encoded_len,
                          int sample_rate_hz, size_t max_decoded_bytes,
                          int16_t* decoded, SpeechType* speech_type) {
   int duration = PacketDuration(encoded, encoded_len);
-  if (duration >= 0 && duration * sizeof(int16_t) > max_decoded_bytes) {
+  if (duration >= 0 && duration * Channels() * sizeof(int16_t) > max_decoded_bytes) {
     return -1;
   }
   return DecodeInternal(encoded, encoded_len, sample_rate_hz, decoded,
@@ -31,7 +34,8 @@ int AudioDecoder::DecodeRedundant(const uint8_t* encoded, size_t encoded_len,
                                   int sample_rate_hz, size_t max_decoded_bytes,
                                   int16_t* decoded, SpeechType* speech_type) {
   int duration = PacketDurationRedundant(encoded, encoded_len);
-  if (duration >= 0 && duration * sizeof(int16_t) > max_decoded_bytes) {
+  if (duration >= 0 &&
+      duration * Channels() * sizeof(int16_t) > max_decoded_bytes) {
     return -1;
   }
   return DecodeRedundantInternal(encoded, encoded_len, sample_rate_hz, decoded,
