@@ -104,5 +104,5 @@ const coding_param param_set[] =
 
 INSTANTIATE_TEST_CASE_P(AllTest, IsacSpeedTest,
                         ::testing::ValuesIn(param_set));
-x
+
 }  // namespace webrtc

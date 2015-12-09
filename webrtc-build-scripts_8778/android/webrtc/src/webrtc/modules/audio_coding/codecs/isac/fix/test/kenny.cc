@@ -13,7 +13,7 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>
-x
+
 #include "webrtc/modules/audio_coding/codecs/isac/fix/interface/isacfix.h"
 #include "webrtc/test/testsupport/perf_test.h"
 
@@ -663,7 +663,7 @@ int main(int argc, char* argv[])
         streamdata[i] = rand();
       }
     }
-x;
+
     /* set pointer to beginning of file */
     if (fp_gns != NULL) {
       if (fscanf(fp_gns, "%d", &cur_delay) == EOF) {
