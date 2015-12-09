@@ -14,9 +14,11 @@
  * This C file contains the functions for the ISAC API
  *
  */
+/*****Done *********/
 
 #include "webrtc/modules/audio_coding/codecs/isac/main/interface/isac.h"
 
+#include <assert.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -512,8 +514,6 @@ int16_t WebRtcIsac_Encode(ISACStruct* ISAC_main_inst,
   ISACMainStruct* instISAC = (ISACMainStruct*)ISAC_main_inst;
   ISACLBStruct* instLB = &(instISAC->instLB);
   ISACUBStruct* instUB = &(instISAC->instUB);
-  const int16_t* speech_in_ptr = speechIn;
-  int16_t resampled_buff[FRAMESAMPLES_10ms * 2];
 
   /* Check if encoder initiated. */
   if ((instISAC->initFlag & BIT_MASK_ENC_INIT) !=
@@ -522,37 +522,8 @@ int16_t WebRtcIsac_Encode(ISACStruct* ISAC_main_inst,
     return -1;
   }
 
-  if (instISAC->in_sample_rate_hz == 48000) {
-    /* Samples in 10 ms @ 48 kHz. */
-    const int kNumInputSamples = FRAMESAMPLES_10ms * 3;
-    /* Samples 10 ms @ 32 kHz. */
-    const int kNumOutputSamples = FRAMESAMPLES_10ms * 2;
-    /* Resampler divide the input into blocks of 3 samples, i.e.
-     * kNumInputSamples / 3. */
-    const int kNumResamplerBlocks = FRAMESAMPLES_10ms;
-    int32_t buffer32[FRAMESAMPLES_10ms * 3 + SIZE_RESAMPLER_STATE];
-
-    /* Restore last samples from the past to the beginning of the buffer
-     * and store the last samples of current frame for the next resampling. */
-    for (k = 0; k < SIZE_RESAMPLER_STATE; k++) {
-      buffer32[k] = instISAC->state_in_resampler[k];
-      instISAC->state_in_resampler[k] = speechIn[kNumInputSamples -
-                                                 SIZE_RESAMPLER_STATE + k];
-    }
-    for (k = 0; k < kNumInputSamples; k++) {
-      buffer32[SIZE_RESAMPLER_STATE + k] = speechIn[k];
-    }
-    /* Resampling 3 samples to 2. Function divides the input in
-     * |kNumResamplerBlocks| number of 3-sample groups, and output is
-     * |kNumResamplerBlocks| number of 2-sample groups. */
-    WebRtcSpl_Resample48khzTo32khz(buffer32, buffer32, kNumResamplerBlocks);
-    WebRtcSpl_VectorBitShiftW32ToW16(resampled_buff, kNumOutputSamples,
-                                     buffer32, 15);
-    speech_in_ptr = resampled_buff;
-  }
-
   if (instISAC->encoderSamplingRateKHz == kIsacSuperWideband) {
-    WebRtcSpl_AnalysisQMF(speech_in_ptr, SWBFRAMESAMPLES_10ms, speechInLB,
+    WebRtcSpl_AnalysisQMF(speechIn, SWBFRAMESAMPLES_10ms, speechInLB,
                           speechInUB, instISAC->analysisFBState1,
                           instISAC->analysisFBState2);
 
@@ -708,9 +679,10 @@ int16_t WebRtcIsac_Encode(ISACStruct* ISAC_main_inst,
     /* Save data for creation of multiple bit-streams. */
     /* If bit-stream too short then add garbage at the end. */
     if (garbageLen > 0) {
-      for (k = 0; k < garbageLen; k++) {
-        ptrGarbage[k] = (uint8_t)(rand() & 0xFF);
-      }
+      /* Overwrite the garbage area to avoid leaking possibly sensitive data
+         over the network. This also makes the output deterministic. */
+      memset(ptrGarbage, 0, garbageLen);
+
       /* For a correct length of the upper-band bit-stream together
        * with the garbage. Garbage is embeded in upper-band bit-stream.
        * That is the only way to preserve backward compatibility. */
@@ -1569,6 +1541,13 @@ int16_t WebRtcIsac_Control(ISACStruct* ISAC_main_inst,
   return 0;
 }
 
+void WebRtcIsac_SetInitialBweBottleneck(ISACStruct* ISAC_main_inst,
+                                        int bottleneck_bits_per_second) {
+  ISACMainStruct* instISAC = (ISACMainStruct*)ISAC_main_inst;
+  assert(bottleneck_bits_per_second >= 10000 &&
+         bottleneck_bits_per_second <= 32000);
+  instISAC->bwestimator_obj.send_bw_avg = (float)bottleneck_bits_per_second;
+}
 
 /****************************************************************************
  * WebRtcIsac_ControlBwe(...)
@@ -1846,10 +1825,8 @@ int16_t WebRtcIsac_GetNewFrameLen(ISACStruct* ISAC_main_inst) {
   /* Return new frame length. */
   if (instISAC->in_sample_rate_hz == 16000)
     return (instISAC->instLB.ISACencLB_obj.new_framelength);
-  else if (instISAC->in_sample_rate_hz == 32000)
+  else /* 32000 Hz */
     return ((instISAC->instLB.ISACencLB_obj.new_framelength) * 2);
-  else
-    return ((instISAC->instLB.ISACencLB_obj.new_framelength) * 3);
 }
 
 
@@ -2208,8 +2185,8 @@ void WebRtcIsac_version(char* version) {
  *
  * Input:
  *        - ISAC_main_inst    : iSAC instance
- *        - sample_rate_hz    : sampling rate in Hertz, valid values are 16000,
- *                              32000 and 48000.
+ *        - sample_rate_hz    : sampling rate in Hertz, valid values are 16000
+ *                              and 32000.
  *
  * Return value               : 0 if successful
  *                             -1 if failed.
@@ -2219,8 +2196,7 @@ int16_t WebRtcIsac_SetEncSampRate(ISACStruct* ISAC_main_inst,
   ISACMainStruct* instISAC = (ISACMainStruct*)ISAC_main_inst;
   enum IsacSamplingRate encoder_operational_rate;
 
-  if ((sample_rate_hz != 16000) && (sample_rate_hz != 32000) &&
-      (sample_rate_hz != 48000)) {
+  if ((sample_rate_hz != 16000) && (sample_rate_hz != 32000)) {
     /* Sampling Frequency is not supported. */
     instISAC->errorCode = ISAC_UNSUPPORTED_SAMPLING_FREQUENCY;
     return -1;

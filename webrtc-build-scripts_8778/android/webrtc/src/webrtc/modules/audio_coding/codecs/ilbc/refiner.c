@@ -59,11 +59,9 @@ void WebRtcIlbcfix_Refiner(
 
   estSegPosRounded = (estSegPos - 2) >> 2;
 
-  searchSegStartPos=estSegPosRounded-ENH_SLOP;
+  searchSegStartPos =
+      (estSegPosRounded < ENH_SLOP) ? 0 : (estSegPosRounded - ENH_SLOP);
 
-  if (searchSegStartPos<0) {
-    searchSegStartPos=0;
-  }
   searchSegEndPos=estSegPosRounded+ENH_SLOP;
 
   if(searchSegEndPos+ENH_BLOCKL >= idatal) {

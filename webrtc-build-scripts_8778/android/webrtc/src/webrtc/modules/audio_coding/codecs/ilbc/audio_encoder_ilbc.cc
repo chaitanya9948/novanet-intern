@@ -10,9 +10,11 @@
 
 #include "webrtc/modules/audio_coding/codecs/ilbc/interface/audio_encoder_ilbc.h"
 
-#include <cstring>
+#include <algorithm>
 #include <limits>
+#include <cstring>
 #include "webrtc/base/checks.h"
+#include "webrtc/common_types.h"
 #include "webrtc/modules/audio_coding/codecs/ilbc/interface/ilbc.h"
 
 namespace webrtc {

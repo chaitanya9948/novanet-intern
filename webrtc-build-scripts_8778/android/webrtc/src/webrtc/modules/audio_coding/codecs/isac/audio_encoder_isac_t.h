@@ -70,7 +70,6 @@ class AudioEncoderDecoderIsacT : public AudioEncoder, public AudioDecoder {
   size_t MaxEncodedBytes() const override;
   int Num10MsFramesInNextPacket() const override;
   int Max10MsFramesInAPacket() const override;
-  //int GetTargetBitrate() const override;
 
   // AudioDecoder methods.
   bool HasDecodePlc() const override;

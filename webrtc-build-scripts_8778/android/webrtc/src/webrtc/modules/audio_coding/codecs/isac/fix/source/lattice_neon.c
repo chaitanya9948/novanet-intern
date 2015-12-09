@@ -41,7 +41,6 @@ void WebRtcIsacfix_FilterMaLoopNeon(int16_t input0,  // Filter coefficient
   int32x4_t ptr0va, ptr1va, ptr2va;
   int32x4_t ptr0vb, ptr1vb, ptr2vb;
 
-  int64x2_t tmp2al_low, tmp2al_high, tmp2bl_low, tmp2bl_high;
   // Unroll to process 8 samples at once.
   for (n = 0; n < loop; n++) {
     ptr0va = vld1q_s32(ptr0);

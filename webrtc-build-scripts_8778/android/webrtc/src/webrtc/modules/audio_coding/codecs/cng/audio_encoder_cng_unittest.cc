@@ -432,7 +432,7 @@ TEST_F(AudioEncoderCngDeathTest, WrongFrameSize) {
   num_audio_samples_10ms_ = 0;  // Zero samples.
   EXPECT_DEATH(Encode(), "");
 }
-
+x;
 TEST_F(AudioEncoderCngDeathTest, WrongNumCoefficients) {
   config_.num_cng_coefficients = -1;
   EXPECT_DEATH(CreateCng(), "Invalid configuration");

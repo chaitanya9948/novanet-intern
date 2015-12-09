@@ -14,7 +14,7 @@
  * This C file contains the functions for the ISAC API
  *
  */
-
+/********* 	Done ***********/
 #include "webrtc/modules/audio_coding/codecs/isac/fix/interface/isacfix.h"
 
 #include <assert.h>
@@ -72,10 +72,12 @@ int16_t WebRtcIsacfix_AssignSize(int *sizeinbytes) {
 
 int16_t WebRtcIsacfix_Assign(ISACFIX_MainStruct **inst, void *ISACFIX_inst_Addr) {
   if (ISACFIX_inst_Addr!=NULL) {
-    *inst = (ISACFIX_MainStruct*)ISACFIX_inst_Addr;
-    (*(ISACFIX_SubStruct**)inst)->errorcode = 0;
-    (*(ISACFIX_SubStruct**)inst)->initflag = 0;
-    (*(ISACFIX_SubStruct**)inst)->ISACenc_obj.SaveEnc_ptr = NULL;
+    ISACFIX_SubStruct* self = ISACFIX_inst_Addr;
+    *inst = (ISACFIX_MainStruct*)self;
+    self->errorcode = 0;
+    self->initflag = 0;
+    self->ISACenc_obj.SaveEnc_ptr = NULL;
+    WebRtcIsacfix_InitBandwidthEstimator(&self->bwestimator_obj);
     return(0);
   } else {
     return(-1);
@@ -108,6 +110,7 @@ int16_t WebRtcIsacfix_Create(ISACFIX_MainStruct **ISAC_main_inst)
     (*(ISACFIX_SubStruct**)ISAC_main_inst)->initflag = 0;
     (*(ISACFIX_SubStruct**)ISAC_main_inst)->ISACenc_obj.SaveEnc_ptr = NULL;
     WebRtcSpl_Init();
+    WebRtcIsacfix_InitBandwidthEstimator(&tempo->bwestimator_obj);
     return(0);
   } else {
     return(-1);
@@ -240,10 +243,35 @@ static void WebRtcIsacfix_InitMIPS(void) {
 }
 #endif
 
+static void InitFunctionPointers(void) {
+  WebRtcIsacfix_AutocorrFix = WebRtcIsacfix_AutocorrC;
+  WebRtcIsacfix_FilterMaLoopFix = WebRtcIsacfix_FilterMaLoopC;
+  WebRtcIsacfix_CalculateResidualEnergy =
+      WebRtcIsacfix_CalculateResidualEnergyC;
+  WebRtcIsacfix_AllpassFilter2FixDec16 = WebRtcIsacfix_AllpassFilter2FixDec16C;
+  WebRtcIsacfix_HighpassFilterFixDec32 = WebRtcIsacfix_HighpassFilterFixDec32C;
+  WebRtcIsacfix_Time2Spec = WebRtcIsacfix_Time2SpecC;
+  WebRtcIsacfix_Spec2Time = WebRtcIsacfix_Spec2TimeC;
+  WebRtcIsacfix_MatrixProduct1 = WebRtcIsacfix_MatrixProduct1C;
+  WebRtcIsacfix_MatrixProduct2 = WebRtcIsacfix_MatrixProduct2C;
+
+#ifdef WEBRTC_DETECT_ARM_NEON
+  if ((WebRtc_GetCPUFeaturesARM() & kCPUFeatureNEON) != 0) {
+    WebRtcIsacfix_InitNeon();
+  }
+#elif defined(WEBRTC_ARCH_ARM_NEON)
+  WebRtcIsacfix_InitNeon();
+#endif
+
+#if defined(MIPS32_LE)
+  WebRtcIsacfix_InitMIPS();
+#endif
+}
+
 /****************************************************************************
  * WebRtcIsacfix_EncoderInit(...)
  *
- * This function initializes a ISAC instance prior to the encoder calls.
+z * This function initializes a ISAC instance prior to the encoder calls.
  *
  * Input:
  *      - ISAC_main_inst    : ISAC instance.
@@ -318,29 +346,7 @@ int16_t WebRtcIsacfix_EncoderInit(ISACFIX_MainStruct *ISAC_main_inst,
   WebRtcIsacfix_InitPostFilterbank(&ISAC_inst->ISACenc_obj.interpolatorstr_obj);
 #endif
 
-  // Initiaze function pointers.
-  WebRtcIsacfix_AutocorrFix = WebRtcIsacfix_AutocorrC;
-  WebRtcIsacfix_FilterMaLoopFix = WebRtcIsacfix_FilterMaLoopC;
-  WebRtcIsacfix_CalculateResidualEnergy =
-      WebRtcIsacfix_CalculateResidualEnergyC;
-  WebRtcIsacfix_AllpassFilter2FixDec16 = WebRtcIsacfix_AllpassFilter2FixDec16C;
-  WebRtcIsacfix_HighpassFilterFixDec32 = WebRtcIsacfix_HighpassFilterFixDec32C;
-  WebRtcIsacfix_Time2Spec = WebRtcIsacfix_Time2SpecC;
-  WebRtcIsacfix_Spec2Time = WebRtcIsacfix_Spec2TimeC;
-  WebRtcIsacfix_MatrixProduct1 = WebRtcIsacfix_MatrixProduct1C;
-  WebRtcIsacfix_MatrixProduct2 = WebRtcIsacfix_MatrixProduct2C;
-
-#ifdef WEBRTC_DETECT_ARM_NEON
-  if ((WebRtc_GetCPUFeaturesARM() & kCPUFeatureNEON) != 0) {
-    WebRtcIsacfix_InitNeon();
-  }
-#elif defined(WEBRTC_ARCH_ARM_NEON)
-  WebRtcIsacfix_InitNeon();
-#endif
-
-#if defined(MIPS32_LE)
-  WebRtcIsacfix_InitMIPS();
-#endif
+  InitFunctionPointers();
 
   return statusInit;
 }
@@ -575,6 +581,8 @@ int16_t WebRtcIsacfix_DecoderInit(ISACFIX_MainStruct *ISAC_main_inst)
 {
   ISACFIX_SubStruct *ISAC_inst;
 
+  InitFunctionPointers();
+
   /* typecast pointer to real structure */
   ISAC_inst = (ISACFIX_SubStruct *)ISAC_main_inst;
 
@@ -697,7 +705,6 @@ int16_t WebRtcIsacfix_UpdateBwEstimate(ISACFIX_MainStruct *ISAC_main_inst,
   Bitstr_dec streamdata;
   int16_t err;
   const int kRequiredEncodedLenBytes = 10;
-
   /* typecast pointer to real structure */
   ISAC_inst = (ISACFIX_SubStruct *)ISAC_main_inst;
 
@@ -1523,4 +1530,18 @@ int16_t WebRtcIsacfix_SetMaxRate(ISACFIX_MainStruct *ISAC_main_inst,
 void WebRtcIsacfix_version(char *version)
 {
   strcpy(version, "3.6.0");
+}
+
+void WebRtcIsacfix_GetBandwidthInfo(ISACFIX_MainStruct* ISAC_main_inst,
+                                    IsacBandwidthInfo* bwinfo) {
+  ISACFIX_SubStruct* inst = (ISACFIX_SubStruct*)ISAC_main_inst;
+  assert(inst->initflag & 1);  // Decoder initialized.
+  WebRtcIsacfixBw_GetBandwidthInfo(&inst->bwestimator_obj, bwinfo);
+}
+
+void WebRtcIsacfix_SetBandwidthInfo(ISACFIX_MainStruct* ISAC_main_inst,
+                                    const IsacBandwidthInfo* bwinfo) {
+  ISACFIX_SubStruct* inst = (ISACFIX_SubStruct*)ISAC_main_inst;
+  assert(inst->initflag & 2);  // Encoder initialized.
+  WebRtcIsacfixBw_SetBandwidthInfo(&inst->bwestimator_obj, bwinfo);
 }

@@ -95,9 +95,7 @@ void AudioEncoderPcm::EncodeInternal(uint32_t rtp_timestamp,
   if (speech_buffer_.empty()) {
     first_timestamp_in_buffer_ = rtp_timestamp;
   }
-  for (int i = 0; i < num_samples; ++i) {
-    speech_buffer_.push_back(audio[i]);
-  }
+  speech_buffer_.insert(speech_buffer_.end(), audio, audio + num_samples);
   if (speech_buffer_.size() < full_frame_samples_) {
     info->encoded_bytes = 0;
     return;

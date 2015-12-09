@@ -15,7 +15,7 @@
  WebRtcIlbcfix_NearestNeighbor.c
 
 ******************************************************************/
-
+#include <stdint.h>
 #include "defines.h"
 
 /*----------------------------------------------------------------*
@@ -32,15 +32,12 @@ void WebRtcIlbcfix_NearestNeighbor(
                                    ){
   int i;
   int16_t diff;
-  /* Stack based */
-  int32_t crit[8];
-
-  /* Calculate square distance */
-  for(i=0;i<arlength;i++){
-    diff=array[i]-value;
-    crit[i] = diff * diff;
+  int16_t min_diff = INT16_MAX;
+  for(i=0;i < arlength;i++){
+		diff = (array[i] < value) ? (value - array[i]) : (array[i] - value);
+    if (diff < min_diff) {
+      *index = i;
+      min_diff = diff;
+    }
   }
-
-  /* Find the minimum square distance */
-  *index=WebRtcSpl_MinIndexW32(crit, (int16_t)arlength);
 }
