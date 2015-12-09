@@ -7,6 +7,8 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+
+/********* Done ******/
 #include <string>
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -97,6 +99,7 @@ TEST_F(IsacTest, IsacUpdateBWE) {
   encoded_bytes =  WebRtcIsac_Encode(isac_codec_, speech_data_, bitstream_);
   EXPECT_EQ(0, encoded_bytes);
   encoded_bytes =  WebRtcIsac_Encode(isac_codec_, speech_data_, bitstream_);
+  EXPECT_GT(encoded_bytes, 0);
 
   // Call to update bandwidth estimator with real data.
   EXPECT_EQ(0, WebRtcIsac_UpdateBwEstimate(isac_codec_, bitstream_,
