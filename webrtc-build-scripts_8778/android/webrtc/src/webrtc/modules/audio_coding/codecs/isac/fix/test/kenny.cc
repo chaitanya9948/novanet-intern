@@ -13,7 +13,7 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>
-
+x
 #include "webrtc/modules/audio_coding/codecs/isac/fix/interface/isacfix.h"
 #include "webrtc/test/testsupport/perf_test.h"
 
@@ -231,7 +231,7 @@ int main(int argc, char* argv[])
   CodingMode = 0;
   testNum = 0;
   testCE = 0;
-  for (i = 1; i < argc-2;i++) {
+  for (i = 1; i + 2 < argc ; i++) {
     /* Instantaneous mode */
     if (!strcmp ("-I", argv[i])) {
       printf("\nInstantaneous BottleNeck\n");
@@ -535,12 +535,7 @@ int main(int argc, char* argv[])
         printf("\n\n Error in encoderinit: %d.\n\n", errtype);
       }
 
-      err = WebRtcIsacfix_DecoderInit(ISAC_main_inst);
-      /* Error check */
-      if (err < 0) {
-        errtype=WebRtcIsacfix_GetErrorCode(ISAC_main_inst);
-        printf("\n\n Error in decoderinit: %d.\n\n", errtype);
-      }
+      WebRtcIsacfix_DecoderInit(ISAC_main_inst);
     }
 
 
@@ -668,7 +663,7 @@ int main(int argc, char* argv[])
         streamdata[i] = rand();
       }
     }
-
+x;
     /* set pointer to beginning of file */
     if (fp_gns != NULL) {
       if (fscanf(fp_gns, "%d", &cur_delay) == EOF) {

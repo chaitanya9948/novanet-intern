@@ -15,6 +15,8 @@
  *
  */
 
+/****** Done *******/
+
 #include "webrtc/modules/audio_coding/codecs/isac/fix/source/codec.h"
 
 #include <assert.h>
@@ -352,8 +354,8 @@ int WebRtcIsacfix_EncodeImpl(int16_t      *in,
     // scale FFT coefficients to reduce the bit-rate
     for(k = 0; k < FRAMESAMPLES_HALF; k++)
     {
-      LP16a[k] = (int16_t)WEBRTC_SPL_MUL_16_16_RSFT(LP16a[k], scaleQ14[idx], 14);
-      LPandHP[k] = (int16_t)WEBRTC_SPL_MUL_16_16_RSFT(LPandHP[k], scaleQ14[idx], 14);
+      LP16a[k] = (int16_t)(LP16a[k] * scaleQ14[idx] >> 14);
+      LPandHP[k] = (int16_t)(LPandHP[k] * scaleQ14[idx] >> 14);
     }
 
     // Save data for multiple packets memory

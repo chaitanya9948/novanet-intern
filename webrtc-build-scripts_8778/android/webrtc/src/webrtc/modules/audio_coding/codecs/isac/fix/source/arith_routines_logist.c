@@ -15,6 +15,8 @@
  *
  */
 
+/******** Done **********/
+
 #include "arith_routins.h"
 
 /* Tables for piecewise linear cdf functions: y = k*x */
@@ -377,11 +379,10 @@ int WebRtcIsacfix_DecLogisticMulti2(int16_t *dataQ7,
         if (streamPtr < streamData->stream + streamData->stream_size) {
           /* read next byte from stream */
           if (streamData->full == 0) {
-            streamVal = WEBRTC_SPL_LSHIFT_W32(streamVal, 8) | (*streamPtr++ & 0x00FF);
+            streamVal = (streamVal << 8) | (*streamPtr++ & 0x00FF);
             streamData->full = 1;
           } else {
-            streamVal = WEBRTC_SPL_LSHIFT_W32(streamVal, 8) |
-                ((*streamPtr) >> 8);
+            streamVal = (streamVal << 8) | (*streamPtr >> 8);
             streamData->full = 0;
           }
         } else {

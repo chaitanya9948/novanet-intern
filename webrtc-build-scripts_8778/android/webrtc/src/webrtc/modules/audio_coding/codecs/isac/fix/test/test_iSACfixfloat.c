@@ -30,7 +30,7 @@
 /* sampling frequency (Hz) */
 #define FS								16000
 
-
+x;
 
 /* Runtime statistics */
 #include <time.h>
