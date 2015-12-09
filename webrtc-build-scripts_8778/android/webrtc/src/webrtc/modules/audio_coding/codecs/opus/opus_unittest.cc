@@ -140,8 +140,8 @@ void OpusTest::TestDtxEffect(bool dtx) {
                                      channels_ == 1 ? 32000 : 64000));
 
   // Set input audio as silence.
-  std::vector<int16_t> silence(kOpus20msFrameSamples * channels_, 0);
-
+  int16_t* silence = new int16_t[kOpus20msFrameSamples * channels_];
+  memset(silence, 0, sizeof(int16_t) * kOpus20msFrameSamples * channels_);
   // Setting DTX.
   EXPECT_EQ(0, dtx ? WebRtcOpus_EnableDtx(opus_encoder_) :
       WebRtcOpus_DisableDtx(opus_encoder_));

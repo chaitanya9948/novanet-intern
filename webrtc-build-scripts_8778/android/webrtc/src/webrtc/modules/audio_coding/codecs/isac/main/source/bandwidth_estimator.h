@@ -25,7 +25,7 @@
 
 #include "structs.h"
 #include "settings.h"
-
+#include <stddef.h>
 
 #define MIN_ISAC_BW     10000
 #define MIN_ISAC_BW_LB  10000
