@@ -73,8 +73,11 @@ class TimeStretch {
   // if possible, performs the time-stretching. This method must be implemented
   // by the sub-classes.
   virtual ReturnCodes CheckCriteriaAndStretch(
-      const int16_t* input, size_t input_length, size_t peak_index,
-      int16_t best_correlation, bool active_speech,
+      const int16_t* input, 
+	  size_t input_length, 
+	  size_t peak_index,
+      int16_t best_correlation,
+	   bool active_speech,
       AudioMultiVector* output) const = 0;
 
   static const int kCorrelationLen = 50;

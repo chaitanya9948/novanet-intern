@@ -7,9 +7,13 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_BUFFER_LEVEL_FILTER_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_BUFFER_LEVEL_FILTER_H_
+
+#include <stddef.h>
 
 #include "webrtc/base/constructormagic.h"
 
@@ -34,7 +38,7 @@ class BufferLevelFilter {
   // filter coefficient.
   virtual void SetTargetBufferLevel(int target_buffer_level);
 
-  virtual int filtered_current_level() const { return filtered_current_level_; }
+  virtual int filtered_current_level() const;
 
  private:
   int level_factor_;  // Filter factor for the buffer level filter in Q8.

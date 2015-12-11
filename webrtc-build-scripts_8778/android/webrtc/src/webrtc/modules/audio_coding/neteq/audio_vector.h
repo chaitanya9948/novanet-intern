@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_AUDIO_VECTOR_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_AUDIO_VECTOR_H_
 
@@ -22,20 +24,12 @@ namespace webrtc {
 class AudioVector {
  public:
   // Creates an empty AudioVector.
-  AudioVector()
-      : array_(new int16_t[kDefaultInitialSize]),
-        first_free_ix_(0),
-        capacity_(kDefaultInitialSize) {}
+  AudioVector();
 
   // Creates an AudioVector with an initial size.
-  explicit AudioVector(size_t initial_size)
-      : array_(new int16_t[initial_size]),
-        first_free_ix_(initial_size),
-        capacity_(initial_size) {
-    memset(array_.get(), 0, initial_size * sizeof(int16_t));
-  }
+  explicit AudioVector(size_t initial_size);
 
-  virtual ~AudioVector() {}
+  virtual ~AudioVector();
 
   // Deletes all values and make the vector empty.
   virtual void Clear();
@@ -94,10 +88,10 @@ class AudioVector {
   virtual void CrossFade(const AudioVector& append_this, size_t fade_length);
 
   // Returns the number of elements in this AudioVector.
-  virtual size_t Size() const { return first_free_ix_; }
+  virtual size_t Size() const;
 
   // Returns true if this AudioVector is empty.
-  virtual bool Empty() const { return (first_free_ix_ == 0); }
+  virtual bool Empty() const;
 
   // Accesses and modifies an element of AudioVector.
   const int16_t& operator[](size_t index) const;

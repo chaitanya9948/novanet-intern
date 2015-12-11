@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 
 #include "webrtc/modules/audio_coding/neteq/tools/neteq_external_decoder_test.h"
 
@@ -37,10 +39,8 @@ void NetEqExternalDecoderTest::InsertPacket(WebRtcRTPHeader rtp_header,
                                             const uint8_t* payload,
                                             size_t payload_size_bytes,
                                             uint32_t receive_timestamp) {
-  ASSERT_EQ(
-      NetEq::kOK,
-      neteq_->InsertPacket(
-          rtp_header, payload, payload_size_bytes, receive_timestamp));
+  ASSERT_EQ(NetEq::kOK,
+  neteq_->InsertPacket( rtp_header, payload, payload_size_bytes, receive_timestamp));
 }
 
 int NetEqExternalDecoderTest::GetOutputAudio(size_t max_length,

@@ -7,7 +7,10 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+/********************
+Edited by Chaitanya Rajesh
 
+*/
 #include "webrtc/modules/audio_coding/neteq/delay_peak_detector.h"
 
 #include <algorithm>  // max
@@ -20,6 +23,8 @@ namespace webrtc {
 // observed peak) is recorded in a vector. When enough peaks have been observed,
 // peak-mode is engaged and the DelayManager asks the DelayPeakDetector for
 // the worst peak height.
+
+DelayPeakDetector::~DelayPeakDetector() = default;
 
 DelayPeakDetector::DelayPeakDetector()
   : peak_found_(false),
@@ -38,6 +43,10 @@ void DelayPeakDetector::SetPacketAudioLength(int length_ms) {
   if (length_ms > 0) {
     peak_detection_threshold_ = kPeakHeightMs / length_ms;
   }
+}
+
+bool DelayPeakDetector::peak_found() {
+  return peak_found_;
 }
 
 int DelayPeakDetector::MaxPeakHeight() const {

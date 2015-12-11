@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/main/test/iSACTest.h"
 
 #include <ctype.h>
@@ -65,22 +67,6 @@ int16_t SetISAConfig(ACMTestISACConfig& isacConfig, AudioCodingModule* acm,
       }
       EXPECT_EQ(0, acm->RegisterSendCodec(sendCodec));
     }
-  }
-
-  if (isacConfig.maxRateBitPerSec > 0) {
-    // Set max rate.
-    EXPECT_EQ(0, acm->SetISACMaxRate(isacConfig.maxRateBitPerSec));
-  }
-  if (isacConfig.maxPayloadSizeByte > 0) {
-    // Set max payload size.
-    EXPECT_EQ(0, acm->SetISACMaxPayloadSize(isacConfig.maxPayloadSizeByte));
-  }
-  if ((isacConfig.initFrameSizeInMsec != 0)
-      || (isacConfig.initRateBitPerSec != 0)) {
-    EXPECT_EQ(0, acm->ConfigISACBandwidthEstimator(
-        static_cast<uint8_t>(isacConfig.initFrameSizeInMsec),
-        static_cast<uint16_t>(isacConfig.initRateBitPerSec),
-        isacConfig.enforceFrameSize));
   }
 
   return 0;
@@ -197,41 +183,6 @@ void ISACTest::Perform() {
 
   SetISACConfigDefault(wbISACConfig);
   SetISACConfigDefault(swbISACConfig);
-  testNr++;
-  EncodeDecode(testNr, wbISACConfig, swbISACConfig);
-
-  int user_input;
-  if ((_testMode == 0) || (_testMode == 1)) {
-    swbISACConfig.maxPayloadSizeByte = static_cast<uint16_t>(200);
-    wbISACConfig.maxPayloadSizeByte = static_cast<uint16_t>(200);
-  } else {
-    printf("Enter the max payload-size for side A: ");
-    CHECK_ERROR(scanf("%d", &user_input));
-    swbISACConfig.maxPayloadSizeByte = (uint16_t) user_input;
-    printf("Enter the max payload-size for side B: ");
-    CHECK_ERROR(scanf("%d", &user_input));
-    wbISACConfig.maxPayloadSizeByte = (uint16_t) user_input;
-  }
-  testNr++;
-  EncodeDecode(testNr, wbISACConfig, swbISACConfig);
-
-  _acmA->ResetEncoder();
-  _acmB->ResetEncoder();
-  SetISACConfigDefault(wbISACConfig);
-  SetISACConfigDefault(swbISACConfig);
-
-  if ((_testMode == 0) || (_testMode == 1)) {
-    swbISACConfig.maxRateBitPerSec = static_cast<uint32_t>(48000);
-    wbISACConfig.maxRateBitPerSec = static_cast<uint32_t>(48000);
-  } else {
-    printf("Enter the max rate for side A: ");
-    CHECK_ERROR(scanf("%d", &user_input));
-    swbISACConfig.maxRateBitPerSec = (uint32_t) user_input;
-    printf("Enter the max rate for side B: ");
-    CHECK_ERROR(scanf("%d", &user_input));
-    wbISACConfig.maxRateBitPerSec = (uint32_t) user_input;
-  }
-
   testNr++;
   EncodeDecode(testNr, wbISACConfig, swbISACConfig);
 

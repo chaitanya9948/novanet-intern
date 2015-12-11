@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+ /********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/decoder_database.h"
 
 #include <assert.h>
@@ -61,18 +63,19 @@ TEST(DecoderDatabase, GetRtpPayloadType) {
   DecoderDatabase db;
   const uint8_t kPayloadType = 0;
   EXPECT_EQ(DecoderDatabase::kOK,
-            db.RegisterPayload(kPayloadType, kDecoderPCMu));
-  EXPECT_EQ(kPayloadType, db.GetRtpPayloadType(kDecoderPCMu));
+            db.RegisterPayload(kPayloadType, NetEqDecoder::kDecoderPCMu));
+  EXPECT_EQ(kPayloadType, db.GetRtpPayloadType(NetEqDecoder::kDecoderPCMu));
   const uint8_t expected_value = DecoderDatabase::kRtpPayloadTypeError;
   EXPECT_EQ(expected_value,
-            db.GetRtpPayloadType(kDecoderISAC));  // iSAC is not registered.
+            db.GetRtpPayloadType(
+                NetEqDecoder::kDecoderISAC));  // iSAC is not registered.
 }
 
 TEST(DecoderDatabase, GetDecoder) {
   DecoderDatabase db;
   const uint8_t kPayloadType = 0;
   EXPECT_EQ(DecoderDatabase::kOK,
-            db.RegisterPayload(kPayloadType, kDecoderPCM16B));
+            db.RegisterPayload(kPayloadType, NetEqDecoder::kDecoderPCM16B));
   AudioDecoder* dec = db.GetDecoder(kPayloadType);
   ASSERT_TRUE(dec != NULL);
 }
@@ -86,13 +89,13 @@ TEST(DecoderDatabase, TypeTests) {
   const uint8_t kPayloadNotUsed = 102;
   // Load into database.
   EXPECT_EQ(DecoderDatabase::kOK,
-            db.RegisterPayload(kPayloadTypePcmU, kDecoderPCMu));
+            db.RegisterPayload(kPayloadTypePcmU, NetEqDecoder::kDecoderPCMu));
   EXPECT_EQ(DecoderDatabase::kOK,
-            db.RegisterPayload(kPayloadTypeCng, kDecoderCNGnb));
+            db.RegisterPayload(kPayloadTypeCng, NetEqDecoder::kDecoderCNGnb));
   EXPECT_EQ(DecoderDatabase::kOK,
-            db.RegisterPayload(kPayloadTypeDtmf, kDecoderAVT));
+            db.RegisterPayload(kPayloadTypeDtmf, NetEqDecoder::kDecoderAVT));
   EXPECT_EQ(DecoderDatabase::kOK,
-            db.RegisterPayload(kPayloadTypeRed, kDecoderRED));
+            db.RegisterPayload(kPayloadTypeRed, NetEqDecoder::kDecoderRED));
   EXPECT_EQ(4, db.Size());
   // Test.
   EXPECT_FALSE(db.IsComfortNoise(kPayloadNotUsed));
@@ -101,8 +104,8 @@ TEST(DecoderDatabase, TypeTests) {
   EXPECT_FALSE(db.IsComfortNoise(kPayloadTypePcmU));
   EXPECT_FALSE(db.IsDtmf(kPayloadTypePcmU));
   EXPECT_FALSE(db.IsRed(kPayloadTypePcmU));
-  EXPECT_FALSE(db.IsType(kPayloadTypePcmU, kDecoderISAC));
-  EXPECT_TRUE(db.IsType(kPayloadTypePcmU, kDecoderPCMu));
+  EXPECT_FALSE(db.IsType(kPayloadTypePcmU, NetEqDecoder::kDecoderISAC));
+  EXPECT_TRUE(db.IsType(kPayloadTypePcmU, NetEqDecoder::kDecoderPCMu));
   EXPECT_TRUE(db.IsComfortNoise(kPayloadTypeCng));
   EXPECT_TRUE(db.IsDtmf(kPayloadTypeDtmf));
   EXPECT_TRUE(db.IsRed(kPayloadTypeRed));
@@ -114,8 +117,8 @@ TEST(DecoderDatabase, ExternalDecoder) {
   MockAudioDecoder decoder;
   // Load into database.
   EXPECT_EQ(DecoderDatabase::kOK,
-            db.InsertExternal(kPayloadType, kDecoderPCMu, 8000,
-                               &decoder));
+            db.InsertExternal(kPayloadType, NetEqDecoder::kDecoderPCMu, 8000,
+                              &decoder));
   EXPECT_EQ(1, db.Size());
   // Get decoder and make sure we get the external one.
   EXPECT_EQ(&decoder, db.GetDecoder(kPayloadType));
@@ -123,7 +126,7 @@ TEST(DecoderDatabase, ExternalDecoder) {
   const DecoderDatabase::DecoderInfo* info;
   info = db.GetDecoderInfo(kPayloadType);
   ASSERT_TRUE(info != NULL);
-  EXPECT_EQ(kDecoderPCMu, info->codec_type);
+  EXPECT_EQ(NetEqDecoder::kDecoderPCMu, info->codec_type);
   EXPECT_EQ(&decoder, info->decoder);
   EXPECT_EQ(8000, info->fs_hz);
   EXPECT_TRUE(info->external);
@@ -143,8 +146,9 @@ TEST(DecoderDatabase, CheckPayloadTypes) {
   // matter for the test).
   const int kNumPayloads = 10;
   for (uint8_t payload_type = 0; payload_type < kNumPayloads; ++payload_type) {
-    EXPECT_EQ(DecoderDatabase::kOK,
-              db.RegisterPayload(payload_type, kDecoderArbitrary));
+    EXPECT_EQ(
+        DecoderDatabase::kOK,
+        db.RegisterPayload(payload_type, NetEqDecoder::kDecoderArbitrary));
   }
   PacketList packet_list;
   for (int i = 0; i < kNumPayloads + 1; ++i) {

@@ -11,7 +11,9 @@
 // This is the implementation of the PacketBuffer class. It is mostly based on
 // an STL list. The list is kept sorted at all times so that the next packet to
 // decode is at the beginning of the list.
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/packet_buffer.h"
 
 #include <algorithm>  // find_if()
@@ -47,6 +49,10 @@ PacketBuffer::~PacketBuffer() {
 // Flush the buffer. All packets in the buffer will be destroyed.
 void PacketBuffer::Flush() {
   DeleteAllPackets(&buffer_);
+}
+
+bool PacketBuffer::Empty() const {
+  return buffer_.empty();
 }
 
 int PacketBuffer::InsertPacket(Packet* packet) {
@@ -229,6 +235,13 @@ int PacketBuffer::DiscardOldPackets(uint32_t timestamp_limit,
   return 0;
 }
 
+int PacketBuffer::DiscardAllOldPackets(uint32_t timestamp_limit) {
+  return DiscardOldPackets(timestamp_limit, 0);
+}
+
+int PacketBuffer::NumPacketsInBuffer() const {
+  return buffer_.size();
+}
 int PacketBuffer::NumSamplesInBuffer(DecoderDatabase* decoder_database,
                                      int last_decoded_length) const {
   PacketList::const_iterator it;
@@ -238,16 +251,12 @@ int PacketBuffer::NumSamplesInBuffer(DecoderDatabase* decoder_database,
     Packet* packet = (*it);
     AudioDecoder* decoder =
         decoder_database->GetDecoder(packet->header.payloadType);
-    if (decoder) {
-      int duration;
-      if (packet->sync_packet) {
-        duration = last_duration;
-      } else if (packet->primary) {
-        duration =
-            decoder->PacketDuration(packet->payload, packet->payload_length);
-      } else {
+    if (decoder && !packet->sync_packet) {
+      if (!packet->primary) {
         continue;
       }
+      int duration =
+          decoder->PacketDuration(packet->payload, packet->payload_length);
       if (duration >= 0) {
         last_duration = duration;  // Save the most up-to-date (valid) duration.
       }

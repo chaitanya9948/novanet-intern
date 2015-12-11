@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -50,6 +52,11 @@ TEST(AudioCodingModuleTest, DISABLED_ON_ANDROID(TestEncodeDecode)) {
   Trace::ReturnTrace();
 }
 
+#ifdef WEBRTC_CODEC_RED
+#define IF_RED(x) x
+#else
+#define IF_RED(x) DISABLED_##x
+#endif
 TEST(AudioCodingModuleTest, DISABLED_ON_ANDROID(TestRedFec)) {
   Trace::CreateTrace();
   Trace::SetTraceFile((webrtc::test::OutputPath() +
@@ -58,6 +65,11 @@ TEST(AudioCodingModuleTest, DISABLED_ON_ANDROID(TestRedFec)) {
   Trace::ReturnTrace();
 }
 
+#if defined(WEBRTC_CODEC_ISAC) || defined(WEBRTC_CODEC_ISACFX)
+#define IF_ISAC(x) x
+#else
+#define IF_ISAC(x) DISABLED_##x
+#endif
 TEST(AudioCodingModuleTest, DISABLED_ON_ANDROID(TestIsac)) {
   Trace::CreateTrace();
   Trace::SetTraceFile((webrtc::test::OutputPath() +
@@ -66,6 +78,12 @@ TEST(AudioCodingModuleTest, DISABLED_ON_ANDROID(TestIsac)) {
   Trace::ReturnTrace();
 }
 
+#if (defined(WEBRTC_CODEC_ISAC) || defined(WEBRTC_CODEC_ISACFX)) && \
+    defined(WEBRTC_CODEC_ILBC) && defined(WEBRTC_CODEC_G722)
+#define IF_ALL_CODECS(x) x
+#else
+#define IF_ALL_CODECS(x) DISABLED_##x
+#endif
 TEST(AudioCodingModuleTest, DISABLED_ON_ANDROID(TwoWayCommunication)) {
   Trace::CreateTrace();
   Trace::SetTraceFile((webrtc::test::OutputPath() +

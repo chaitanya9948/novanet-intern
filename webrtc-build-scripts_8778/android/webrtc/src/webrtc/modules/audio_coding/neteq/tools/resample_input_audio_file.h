@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_TOOLS_RESAMPLE_INPUT_AUDIO_FILE_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_TOOLS_RESAMPLE_INPUT_AUDIO_FILE_H_
 
@@ -25,7 +27,9 @@ namespace test {
 class ResampleInputAudioFile : public InputAudioFile {
  public:
   ResampleInputAudioFile(const std::string file_name, int file_rate_hz)
-      : InputAudioFile(file_name), file_rate_hz_(file_rate_hz) {}
+      : InputAudioFile(file_name), 
+	  file_rate_hz_(file_rate_hz)
+	   {}
 
   bool Read(size_t samples, int output_rate_hz, int16_t* destination);
 

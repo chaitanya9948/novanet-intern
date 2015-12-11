@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+ /********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_MAIN_ACM2_ACM_RECEIVE_TEST_H_
 #define WEBRTC_MODULES_AUDIO_CODING_MAIN_ACM2_ACM_RECEIVE_TEST_H_
 
@@ -17,6 +19,7 @@
 
 namespace webrtc {
 class AudioCodingModule;
+class AudioDecoder;
 struct CodecInst;
 
 namespace test {
@@ -43,6 +46,11 @@ class AcmReceiveTestOldApi {
   // Registers codecs with payload types matching the pre-encoded NetEq test
   // files.
   void RegisterNetEqTestCodecs();
+
+  int RegisterExternalReceiveCodec(int rtp_payload_type,
+                                   AudioDecoder* external_decoder,
+                                   int sample_rate_hz,
+                                   int num_channels);
 
   // Runs the test and returns true if successful.
   void Run();

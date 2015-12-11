@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+ /********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_MOCK_MOCK_DELAY_MANAGER_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_MOCK_MOCK_DELAY_MANAGER_H_
 
@@ -19,7 +21,8 @@ namespace webrtc {
 
 class MockDelayManager : public DelayManager {
  public:
-  MockDelayManager(int max_packets_in_buffer, DelayPeakDetector* peak_detector)
+  MockDelayManager(int max_packets_in_buffer,
+   DelayPeakDetector* peak_detector)
       : DelayManager(max_packets_in_buffer, peak_detector) {}
   virtual ~MockDelayManager() { Die(); }
   MOCK_METHOD0(Die, void());

@@ -7,7 +7,10 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+/********************
+Edited by Chaitanya Rajesh
 
+*/
 #include "webrtc/modules/audio_coding/neteq/audio_classifier.h"
 
 #include <assert.h>
@@ -65,6 +68,10 @@ bool AudioClassifier::Analysis(const int16_t* input,
                &analysis_info_);
   music_probability_ = analysis_info_.music_prob;
   is_music_ = music_probability_ > kDefaultThreshold;
+  return is_music_;
+}
+
+bool AudioClassifier::is_music() const {
   return is_music_;
 }
 

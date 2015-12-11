@@ -7,19 +7,10 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+ /********************
+Edited by Chaitanya Rajesh
+*/
 // TODO(hlundin): Reformat file to meet style guide.
-/*********************/
-/* updated by Rajesh   */
-//
-//
-//
-//
-//
-//
-//
-/*********************/
-
 /* header includes */
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,6 +36,7 @@
 /************************/
 
 #include "PayloadTypes.h"
+
 
 
 /*********************/
@@ -102,13 +94,13 @@ int NetEQTest_init_coders(webrtc::NetEqDecoder coder,
 void defineCodecs(webrtc::NetEqDecoder* usedCodec, int* noOfCodecs);
 int NetEQTest_free_coders(webrtc::NetEqDecoder coder, int numChannels);
 int NetEQTest_encode(int coder,
-                     int16_t* indata,
+                        int16_t* indata,
                      int frameLen,
-                     unsigned char* encoded,
-                     int sampleRate,
-                     int* vad,
-                     int useVAD,
-                     int bitrate,
+                        unsigned char* encoded,
+                        int sampleRate,
+                        int* vad,
+                        int useVAD,
+                        int bitrate,
                      int numChannels);
 void makeRTPheader(unsigned char* rtp_data,
                    int payloadType,
@@ -123,10 +115,10 @@ int makeRedundantHeader(unsigned char* rtp_data,
                         int seqNo,
                         uint32_t ssrc);
 int makeDTMFpayload(unsigned char* payload_data,
-                    int Event,
-                    int End,
-                    int Volume,
-                    int Duration);
+                       int Event,
+                       int End,
+                       int Volume,
+                       int Duration);
 void stereoDeInterleave(int16_t* audioSamples, int numSamples);
 void stereoInterleave(unsigned char* data, int dataLen, int stride);
 
@@ -143,18 +135,18 @@ void stereoInterleave(unsigned char* data, int dataLen, int stride);
 	#include "g711_interface.h"
 #endif
 #ifdef CODEC_G729
-	#include "G729Interface.h"
+#include "G729Interface.h"
 #endif
 #ifdef CODEC_G729_1
-	#include "G729_1Interface.h"
+#include "G729_1Interface.h"
 #endif
 #ifdef CODEC_AMR
-	#include "AMRInterface.h"
-	#include "AMRCreation.h"
+#include "AMRInterface.h"
+#include "AMRCreation.h"
 #endif
 #ifdef CODEC_AMRWB
-	#include "AMRWBInterface.h"
-	#include "AMRWBCreation.h"
+#include "AMRWBInterface.h"
+#include "AMRWBCreation.h"
 #endif
 #ifdef CODEC_ILBC
 	#include "ilbc.h"
@@ -164,41 +156,41 @@ void stereoInterleave(unsigned char* data, int dataLen, int stride);
 #endif
 #ifdef NETEQ_ISACFIX_CODEC
 	#include "isacfix.h"
-	#ifdef CODEC_ISAC
-		#error Cannot have both ISAC and ISACfix defined. Please de-select one in the beginning of RTPencode.cpp
-	#endif
+#ifdef CODEC_ISAC
+#error Cannot have both ISAC and ISACfix defined. Please de-select one.
+#endif
 #endif
 #ifdef CODEC_G722
-	#include "g722_interface.h"
+#include "webrtc/modules/audio_coding/codecs/g722/include/g722_interface.h"
 #endif
 #ifdef CODEC_G722_1_24
-	#include "G722_1Interface.h"
+#include "G722_1Interface.h"
 #endif
 #ifdef CODEC_G722_1_32
-	#include "G722_1Interface.h"
+#include "G722_1Interface.h"
 #endif
 #ifdef CODEC_G722_1_16
-	#include "G722_1Interface.h"
+#include "G722_1Interface.h"
 #endif
 #ifdef CODEC_G722_1C_24
-	#include "G722_1Interface.h"
+#include "G722_1Interface.h"
 #endif
 #ifdef CODEC_G722_1C_32
-	#include "G722_1Interface.h"
+#include "G722_1Interface.h"
 #endif
 #ifdef CODEC_G722_1C_48
-	#include "G722_1Interface.h"
+#include "G722_1Interface.h"
 #endif
 #ifdef CODEC_G726
-    #include "G726Creation.h"
-    #include "G726Interface.h"
+#include "G726Creation.h"
+#include "G726Interface.h"
 #endif
 #ifdef CODEC_GSMFR
-	#include "GSMFRInterface.h"
-	#include "GSMFRCreation.h"
+#include "GSMFRInterface.h"
+#include "GSMFRCreation.h"
 #endif
 #if (defined(CODEC_CNGCODEC8) || defined(CODEC_CNGCODEC16) || \
-    defined(CODEC_CNGCODEC32) || defined(CODEC_CNGCODEC48))
+     defined(CODEC_CNGCODEC32) || defined(CODEC_CNGCODEC48))
   #include "webrtc_cng.h"
 #endif
 #if ((defined CODEC_SPEEX_8) || (defined CODEC_SPEEX_16))
@@ -279,23 +271,23 @@ SPEEX_encinst_t* SPEEX16enc_inst[2];
 int main(int argc, char* argv[])
 {
     int packet_size, fs;
-    webrtc::NetEqDecoder usedCodec;
-    int payloadType;
-    int bitrate = 0;
-    int useVAD, vad;
-    int useRed=0;
+  webrtc::NetEqDecoder usedCodec;
+  int payloadType;
+  int bitrate = 0;
+  int useVAD, vad;
+  int useRed = 0;
     int len, enc_len;
-    int16_t org_data[4000];
-    unsigned char rtp_data[8000];
-    int16_t seqNo=0xFFF;
-    uint32_t ssrc=1235412312;
-    uint32_t timestamp=0xAC1245;
-    uint16_t length, plen;
-    uint32_t offset;
-    double sendtime = 0;
-    int red_PT[2] = {0};
-    uint32_t red_TS[2] = {0};
-    uint16_t red_len[2] = {0};
+  int16_t org_data[4000];
+  unsigned char rtp_data[8000];
+  int16_t seqNo = 0xFFF;
+  uint32_t ssrc = 1235412312;
+  uint32_t timestamp = 0xAC1245;
+  uint16_t length, plen;
+  uint32_t offset;
+  double sendtime = 0;
+  int red_PT[2] = {0};
+  uint32_t red_TS[2] = {0};
+  uint16_t red_len[2] = {0};
     int RTPheaderLen=12;
     uint8_t red_data[8000];
 #ifdef INSERT_OLD_PACKETS
@@ -306,12 +298,12 @@ int main(int argc, char* argv[])
     int packet_age=0;
 #endif
 #ifdef INSERT_DTMF_PACKETS
-  int NTone = 1;
-  int DTMFfirst = 1;
-  uint32_t DTMFtimestamp;
-  bool dtmfSent = false;
+    int NTone = 1;
+    int DTMFfirst = 1;
+    uint32_t DTMFtimestamp;
+    bool dtmfSent = false;
 #endif
-  bool usingStereo = false;
+    bool usingStereo = false;
     int stereoMode = 0;
     int numChannels = 1;
 
@@ -452,8 +444,7 @@ int main(int argc, char* argv[])
     argv[4][strlen(argv[4]) - 1] = '\0';
   }
 
-  NetEQTest_GetCodec_and_PT(argv[4], &usedCodec, &payloadType, packet_size, &fs,
-                            &bitrate, &useRed);
+	NetEQTest_GetCodec_and_PT(argv[4], &usedCodec, &payloadType, packet_size, &fs, &bitrate, &useRed);
 
   if (useRed) {
     RTPheaderLen = 12 + 4 + 1; /* standard RTP = 12; 4 bytes per redundant
@@ -474,32 +465,31 @@ int main(int argc, char* argv[])
     switch (usedCodec)
 	 {
       // sample based codecs
-        case webrtc::kDecoderPCMu:
-        case webrtc::kDecoderPCMa:
-        case webrtc::kDecoderG722:
-            {
-                // 1 octet per sample
-                stereoMode = STEREO_MODE_SAMPLE_1;
-                break;
-            }
-        case webrtc::kDecoderPCM16B:
-        case webrtc::kDecoderPCM16Bwb:
-        case webrtc::kDecoderPCM16Bswb32kHz:
-        case webrtc::kDecoderPCM16Bswb48kHz:
-            {
-                // 2 octets per sample
-                stereoMode = STEREO_MODE_SAMPLE_2;
-                break;
-            }
+      case webrtc::NetEqDecoder::kDecoderPCMu:
+      case webrtc::NetEqDecoder::kDecoderPCMa:
+      case webrtc::NetEqDecoder::kDecoderG722: 
+	  {
+        // 1 octet per sample
+        stereoMode = STEREO_MODE_SAMPLE_1;
+        break;
+      }
+      case webrtc::NetEqDecoder::kDecoderPCM16B:
+      case webrtc::NetEqDecoder::kDecoderPCM16Bwb:
+      case webrtc::NetEqDecoder::kDecoderPCM16Bswb32kHz:
+      case webrtc::NetEqDecoder::kDecoderPCM16Bswb48kHz: {
+        // 2 octets per sample
+        stereoMode = STEREO_MODE_SAMPLE_2;
+        break;
+      }
 
-            // fixed-rate frame codecs (with internal VAD)
-        default:
-            {
-                printf("Cannot use codec %s as stereo codec\n", argv[4]);
-                exit(0);
-            }
-        }
+      // fixed-rate frame codecs (with internal VAD)
+      default:
+	   {
+        printf("Cannot use codec %s as stereo codec\n", argv[4]);
+        exit(0);
+      }
     }
+  }
 
 	if ((usedCodec == webrtc::kDecoderISAC) || (usedCodec == webrtc::kDecoderISACswb))
     {
@@ -508,9 +498,10 @@ int main(int argc, char* argv[])
             if (usedCodec == webrtc::kDecoderISAC)
             {
                 bitrate = 32000;
-                printf("Running iSAC at default bitrate of 32000 bps (to specify explicitly add the bps as last parameter)\n");
+                printf(
+                    "Running iSAC at default bitrate of 32000 bps (to specify explicitly add the bps as last parameter)\n");
             }
-      } else  // (usedCodec==webrtc::kDecoderISACswb)
+            else // (usedCodec==webrtc::kDecoderISACswb)
             {
                 bitrate = 56000;
                 printf(
@@ -546,8 +537,8 @@ int main(int argc, char* argv[])
   else {
     
 	if (argc == 7) {
-            printf(
-                "Error: Bitrate parameter can only be specified for iSAC, G.723, and G.729.1\n");
+      printf("Error: Bitrate parameter can only be specified for iSAC, G.723, "
+             "and G.729.1\n");
       exit(0);
     }
   }
@@ -555,14 +546,16 @@ int main(int argc, char* argv[])
   if (useRed) {
     printf("Redundancy engaged. ");
   }
-	printf("Used codec: %i\n",usedCodec);
-	printf("Payload type: %i\n",payloadType);
-	
-	NetEQTest_init_coders(usedCodec, packet_size, bitrate, fs, useVAD, numChannels);
+  printf("Used codec: %i\n", (usedCodec));
+  printf("Payload type: %i\n", payloadType);
+
+  NetEQTest_init_coders(usedCodec, packet_size, bitrate, fs, useVAD,
+                        numChannels);
 
   /* write file header */
   // fprintf(out_file, "#!RTPencode%s\n", "1.0");
-	fprintf(out_file, "#!rtpplay%s \n", "1.0"); // this is the string that rtpplay needs
+  fprintf(out_file, "#!rtpplay%s \n",
+          "1.0");               // this is the string that rtpplay needs
   uint32_t dummy_variable = 0;  // should be converted to network endian format,
                                 // but does not matter when 0
   if (fwrite(&dummy_variable, 4, 1, out_file) != 1) {
@@ -595,8 +588,7 @@ int main(int argc, char* argv[])
   len = fread(org_data, 2, packet_size * numChannels, in_file) / numChannels;
 
   /* de-interleave if stereo */
-    if ( usingStereo )
-    {
+  if (usingStereo) {
     stereoDeInterleave(org_data, len * numChannels);
   }
 
@@ -624,9 +616,9 @@ int main(int argc, char* argv[])
         DTMFfirst = 1;
       }
 
-      /* write RTP packet to file */
-      length = htons(static_cast<unsigned short>(12 + enc_len + 8));
-      plen = htons(static_cast<unsigned short>(12 + enc_len));
+            /* write RTP packet to file */
+            length = htons(12 + enc_len + 8);
+            plen = htons(12 + enc_len);
       offset = (uint32_t)sendtime;  //(timestamp/(fs/1000));
       offset = htonl(offset);
       if (fwrite(&length, 2, 1, out_file) != 1) {
@@ -651,90 +643,83 @@ int main(int argc, char* argv[])
      * time */
     if (dtmfSent) {
       enc_len = 0;
-        }
-        else {
+    } else {
 #endif
-		/* encode frame */
-		enc_len=NetEQTest_encode(usedCodec, org_data, packet_size, &rtp_data[12] ,fs,&vad, useVAD, bitrate, numChannels);
-		if (enc_len==-1) {
-			printf("Error encoding frame\n");
-			exit(0);
-		}
+      /* encode frame */
+      enc_len =
+          NetEQTest_encode(usedCodec, org_data, packet_size, &rtp_data[12], fs,
+                           &vad, useVAD, bitrate, numChannels);
 
-        if ( usingStereo &&
-            stereoMode != STEREO_MODE_FRAME &&
-            vad == 1 )
-        {
-            // interleave the encoded payload for sample-based codecs (not for CNG)
-            stereoInterleave(&rtp_data[12], enc_len, stereoMode);
-        }
+      if (usingStereo && stereoMode != STEREO_MODE_FRAME && vad == 1) {
+        // interleave the encoded payload for sample-based codecs (not for CNG)
+        stereoInterleave(&rtp_data[12], enc_len, stereoMode);
+      }
 #ifdef NO_DTMF_OVERDUB
         }
 #endif
-		
-		if (enc_len > 0 && (sendtime <= STOPSENDTIME || sendtime > RESTARTSENDTIME)) {
-            if(useRed) {
-                if(red_len[0] > 0) {
-                    memmove(&rtp_data[RTPheaderLen+red_len[0]], &rtp_data[12], enc_len);
-                    memcpy(&rtp_data[RTPheaderLen], red_data, red_len[0]);
+
+    if (enc_len > 0 &&
+        (sendtime <= STOPSENDTIME || sendtime > RESTARTSENDTIME)) {
+      if (useRed) {
+        if (red_len[0] > 0) {
+          memmove(&rtp_data[RTPheaderLen + red_len[0]], &rtp_data[12], enc_len);
+          memcpy(&rtp_data[RTPheaderLen], red_data, red_len[0]);
 
                     red_len[1] = enc_len;
-                    red_TS[1] = timestamp;
-                    if(vad)
-                        red_PT[1] = payloadType;
-                    else
-                        red_PT[1] = NETEQ_CODEC_CN_PT;
+          red_TS[1] = timestamp;
+          if (vad)
+            red_PT[1] = payloadType;
+          else
+            red_PT[1] = NETEQ_CODEC_CN_PT;
 
-                    makeRedundantHeader(rtp_data, red_PT, 2, red_TS, red_len, seqNo++, ssrc);
+          makeRedundantHeader(rtp_data, red_PT, 2, red_TS, red_len, seqNo++,
+                              ssrc);
 
+          enc_len += red_len[0] + RTPheaderLen - 12;
+        } else {  // do not use redundancy payload for this packet, i.e., only
+                  // last payload
+          memmove(&rtp_data[RTPheaderLen - 4], &rtp_data[12], enc_len);
+          // memcpy(&rtp_data[RTPheaderLen], red_data, red_len[0]);
 
-                    enc_len += red_len[0] + RTPheaderLen - 12;
-                }
-                else { // do not use redundancy payload for this packet, i.e., only last payload
-                    memmove(&rtp_data[RTPheaderLen-4], &rtp_data[12], enc_len);
-                    //memcpy(&rtp_data[RTPheaderLen], red_data, red_len[0]);
+          red_len[1] = (enc_len);
+          red_TS[1] = timestamp;
+          if (vad)
+            red_PT[1] = payloadType;
+          else
+            red_PT[1] = NETEQ_CODEC_CN_PT;
 
-                    red_len[1] = enc_len;
-                    red_TS[1] = timestamp;
-                    if(vad)
-                        red_PT[1] = payloadType;
-                    else
-                        red_PT[1] = NETEQ_CODEC_CN_PT;
+          makeRedundantHeader(rtp_data, red_PT, 2, red_TS, red_len, seqNo++,
+                              ssrc);
 
-                    makeRedundantHeader(rtp_data, red_PT, 2, red_TS, red_len, seqNo++, ssrc);
-
-
-                    enc_len += red_len[0] + RTPheaderLen - 4 - 12; // 4 is length of redundancy header (not used)
-                }
-            }
-            else {
-                
-                /* make RTP header */
-                if (vad) // regular speech data
-                    makeRTPheader(rtp_data, payloadType, seqNo++,timestamp, ssrc);
-                else // CNG data
-                    makeRTPheader(rtp_data, NETEQ_CODEC_CN_PT, seqNo++,timestamp, ssrc);
-                
-            }
+          enc_len += red_len[0] + RTPheaderLen - 4 -
+                     12;  // 4 is length of redundancy header (not used)
+        }
+      } else {
+        /* make RTP header */
+        if (vad)  // regular speech data
+          makeRTPheader(rtp_data, payloadType, seqNo++, timestamp, ssrc);
+        else  // CNG data
+          makeRTPheader(rtp_data, NETEQ_CODEC_CN_PT, seqNo++, timestamp, ssrc);
+      }
 #ifdef MULTIPLE_SAME_TIMESTAMP
-			int mult_pack=0;
-			do {
-#endif //MULTIPLE_SAME_TIMESTAMP
-			/* write RTP packet to file */
+      int mult_pack = 0;
+      do {
+#endif  // MULTIPLE_SAME_TIMESTAMP
+        /* write RTP packet to file */
                           length = htons(12 + enc_len + 8);
                           plen = htons(12 + enc_len);
-                          offset = (uint32_t) sendtime;
-                          //(timestamp/(fs/1000));
-                          offset = htonl(offset);
-                          if (fwrite(&length, 2, 1, out_file) != 1) {
-                            return -1;
-                          }
-                          if (fwrite(&plen, 2, 1, out_file) != 1) {
-                            return -1;
-                          }
-                          if (fwrite(&offset, 4, 1, out_file) != 1) {
-                            return -1;
-                          }
+        offset = (uint32_t)sendtime;
+        //(timestamp/(fs/1000));
+        offset = htonl(offset);
+        if (fwrite(&length, 2, 1, out_file) != 1) {
+          return -1;
+        }
+        if (fwrite(&plen, 2, 1, out_file) != 1) {
+          return -1;
+        }
+        if (fwrite(&offset, 4, 1, out_file) != 1) {
+          return -1;
+        }
 #ifdef RANDOM_DATA
 			for (int k=0; k<12+enc_len; k++) {
 				rtp_data[k] = rand() + rand();
@@ -742,59 +727,52 @@ int main(int argc, char* argv[])
 #endif
 #ifdef RANDOM_PAYLOAD_DATA
 			for (int k=12; k<12+enc_len; k++) {
-				rtp_data[k] = rand() + rand();
-			}
+          rtp_data[k] = rand() + rand();
+        }
 #endif
-                        if (fwrite(rtp_data, 12 + enc_len, 1, out_file) != 1) {
-                          return -1;
-                        }
+        if (fwrite(rtp_data, 12 + enc_len, 1, out_file) != 1) {
+          return -1;
+        }
 #ifdef MULTIPLE_SAME_TIMESTAMP
-			} while ( (seqNo%REPEAT_PACKET_DISTANCE == 0) && (mult_pack++ < REPEAT_PACKET_COUNT) );
-#endif //MULTIPLE_SAME_TIMESTAMP
+      } while ((seqNo % REPEAT_PACKET_DISTANCE == 0) &&
+               (mult_pack++ < REPEAT_PACKET_COUNT));
+#endif  // MULTIPLE_SAME_TIMESTAMP
 
 #ifdef INSERT_OLD_PACKETS
-			if (packet_age >= OLD_PACKET*fs) {
-				if (!first_old_packet) {
-                                  // send the old packet
-                                  if (fwrite(&old_length, 2, 1,
-                                             out_file) != 1) {
-                                    return -1;
-                                  }
-                                  if (fwrite(&old_plen, 2, 1,
-                                             out_file) != 1) {
-                                    return -1;
-                                  }
-                                  if (fwrite(&offset, 4, 1,
-                                             out_file) != 1) {
-                                    return -1;
-                                  }
-                                  if (fwrite(old_rtp_data, 12 + old_enc_len,
-                                             1, out_file) != 1) {
-                                    return -1;
-                                  }
-				}
-				// store current packet as old
-				old_length=length;
-				old_plen=plen;
-				memcpy(old_rtp_data,rtp_data,12+enc_len);
-				old_enc_len=enc_len;
-				first_old_packet=0;
-				packet_age=0;
-
-			}
-			packet_age += packet_size;
+      if (packet_age >= OLD_PACKET * fs) {
+        if (!first_old_packet) {
+          // send the old packet
+          if (fwrite(&old_length, 2, 1, out_file) != 1) {
+            return -1;
+          }
+          if (fwrite(&old_plen, 2, 1, out_file) != 1) {
+            return -1;
+          }
+          if (fwrite(&offset, 4, 1, out_file) != 1) {
+            return -1;
+          }
+          if (fwrite(old_rtp_data, 12 + old_enc_len, 1, out_file) != 1) {
+            return -1;
+          }
+        }
+        // store current packet as old
+        old_length = length;
+        old_plen = plen;
+        memcpy(old_rtp_data, rtp_data, 12 + enc_len);
+        old_enc_len = enc_len;
+        first_old_packet = 0;
+        packet_age = 0;
+      }
+      packet_age += packet_size;
 #endif
-			
-            if(useRed) {
-                /* move data to redundancy store */
+
+      if (useRed) {
+/* move data to redundancy store */
 #ifdef CODEC_ISAC
-                if(usedCodec==webrtc::kDecoderISAC)
-                {
-                    assert(!usingStereo); // Cannot handle stereo yet
-                    red_len[0] =
-					WebRtcIsac_GetRedPayload(ISAC_inst[0], red_data);
-                }
-                else
+        if (usedCodec == webrtc::NetEqDecoder::kDecoderISAC) {
+          assert(!usingStereo);  // Cannot handle stereo yet
+          red_len[0] = WebRtcIsac_GetRedPayload(ISAC_inst[0], red_data);
+        } else 
 		{
 #endif
           memcpy(red_data, &rtp_data[RTPheaderLen + red_len[0]], enc_len);
@@ -831,6 +809,9 @@ int main(int argc, char* argv[])
   return (0);
 }
 
+
+
+
 /****************/
 /* Subfunctions */
 /****************/
@@ -843,96 +824,86 @@ void NetEQTest_GetCodec_and_PT(char* name,
                                int* bitrate,
                                int* useRed) {
 
-  *bitrate = 0; /* Default bitrate setting */
-  *useRed = 0;  /* Default no redundancy */
+	*bitrate = 0; /* Default bitrate setting */
+    *useRed = 0; /* Default no redundancy */
 
-	if(!strcmp(name,"pcmu")){
-		*codec=webrtc::kDecoderPCMu;
-		*PT=NETEQ_CODEC_PCMU_PT;
-		*fs=8000;
-	}
-	else if(!strcmp(name,"pcma")){
-		*codec=webrtc::kDecoderPCMa;
-		*PT=NETEQ_CODEC_PCMA_PT;
-		*fs=8000;
-	}
-	else if(!strcmp(name,"pcm16b")){
-		*codec=webrtc::kDecoderPCM16B;
-		*PT=NETEQ_CODEC_PCM16B_PT;
-		*fs=8000;
-	}
-	else if(!strcmp(name,"pcm16b_wb")){
-		*codec=webrtc::kDecoderPCM16Bwb;
-		*PT=NETEQ_CODEC_PCM16B_WB_PT;
-		*fs=16000;
-	}
-	else if(!strcmp(name,"pcm16b_swb32")){
-		*codec=webrtc::kDecoderPCM16Bswb32kHz;
-		*PT=NETEQ_CODEC_PCM16B_SWB32KHZ_PT;
-		*fs=32000;
-	}
-	else if(!strcmp(name,"pcm16b_swb48")){
-		*codec=webrtc::kDecoderPCM16Bswb48kHz;
-		*PT=NETEQ_CODEC_PCM16B_SWB48KHZ_PT;
-		*fs=48000;
-	}
-	else if(!strcmp(name,"g722")){
-		*codec=webrtc::kDecoderG722;
-		*PT=NETEQ_CODEC_G722_PT;
-		*fs=16000;
-	}
-	else if((!strcmp(name,"ilbc"))&&((frameLen%240==0)||(frameLen%160==0))){
-		*fs=8000;
-		*codec=webrtc::kDecoderILBC;
-		*PT=NETEQ_CODEC_ILBC_PT;
-	}
-	else if(!strcmp(name,"isac")){
-		*fs=16000;
-		*codec=webrtc::kDecoderISAC;
-		*PT=NETEQ_CODEC_ISAC_PT;
-	}
-    else if(!strcmp(name,"isacswb")){
-		*fs=32000;
-		*codec=webrtc::kDecoderISACswb;
-		*PT=NETEQ_CODEC_ISACSWB_PT;
-	}
-    else if(!strcmp(name,"red_pcm")){
-		*codec=webrtc::kDecoderPCMa;
-		*PT=NETEQ_CODEC_PCMA_PT; /* this will be the PT for the sub-headers */
-		*fs=8000;
-        *useRed = 1;
-	} else if(!strcmp(name,"red_isac")){
-		*codec=webrtc::kDecoderISAC;
-		*PT=NETEQ_CODEC_ISAC_PT; /* this will be the PT for the sub-headers */
-		*fs=16000;
-        *useRed = 1;
-    } else {
-		printf("Error: Not a supported codec (%s)\n", name);
-		exit(0);
-	}
-
+  if (!strcmp(name, "pcmu")) {
+    *codec = webrtc::NetEqDecoder::kDecoderPCMu;
+    *PT = NETEQ_CODEC_PCMU_PT;
+    *fs = 8000;
+  } else if (!strcmp(name, "pcma")) {
+    *codec = webrtc::NetEqDecoder::kDecoderPCMa;
+    *PT = NETEQ_CODEC_PCMA_PT;
+    *fs = 8000;
+  } else if (!strcmp(name, "pcm16b")) {
+    *codec = webrtc::NetEqDecoder::kDecoderPCM16B;
+    *PT = NETEQ_CODEC_PCM16B_PT;
+    *fs = 8000;
+  } else if (!strcmp(name, "pcm16b_wb")) {
+    *codec = webrtc::NetEqDecoder::kDecoderPCM16Bwb;
+    *PT = NETEQ_CODEC_PCM16B_WB_PT;
+    *fs = 16000;
+  } else if (!strcmp(name, "pcm16b_swb32")) {
+    *codec = webrtc::NetEqDecoder::kDecoderPCM16Bswb32kHz;
+    *PT = NETEQ_CODEC_PCM16B_SWB32KHZ_PT;
+    *fs = 32000;
+  } else if (!strcmp(name, "pcm16b_swb48")) {
+    *codec = webrtc::NetEqDecoder::kDecoderPCM16Bswb48kHz;
+    *PT = NETEQ_CODEC_PCM16B_SWB48KHZ_PT;
+    *fs = 48000;
+  } else if (!strcmp(name, "g722")) {
+    *codec = webrtc::NetEqDecoder::kDecoderG722;
+    *PT = NETEQ_CODEC_G722_PT;
+    *fs = 16000;
+  } else if ((!strcmp(name, "ilbc")) &&
+             ((frameLen % 240 == 0) || (frameLen % 160 == 0))) {
+    *fs = 8000;
+    *codec = webrtc::NetEqDecoder::kDecoderILBC;
+    *PT = NETEQ_CODEC_ILBC_PT;
+  } else if (!strcmp(name, "isac")) {
+    *fs = 16000;
+    *codec = webrtc::NetEqDecoder::kDecoderISAC;
+    *PT = NETEQ_CODEC_ISAC_PT;
+  } else if (!strcmp(name, "isacswb")) {
+    *fs = 32000;
+    *codec = webrtc::NetEqDecoder::kDecoderISACswb;
+    *PT = NETEQ_CODEC_ISACSWB_PT;
+  } else if (!strcmp(name, "red_pcm")) {
+    *codec = webrtc::NetEqDecoder::kDecoderPCMa;
+    *PT = NETEQ_CODEC_PCMA_PT; /* this will be the PT for the sub-headers */
+    *fs = 8000;
+    *useRed = 1;
+  } else if (!strcmp(name, "red_isac")) {
+    *codec = webrtc::NetEqDecoder::kDecoderISAC;
+    *PT = NETEQ_CODEC_ISAC_PT; /* this will be the PT for the sub-headers */
+    *fs = 16000;
+    *useRed = 1;
+  } else {
+    printf("Error: Not a supported codec (%s)\n", name);
+    exit(0);
+  }
 }
 
-int NetEQTest_init_coders(webrtc::NetEqDecoder coder, 
-int enc_frameSize, 
-int bitrate, 
-int sampfreq , 
-int vad, 
-int numChannels){
-  int ok = 0;
 
+
+
+int NetEQTest_init_coders(webrtc::NetEqDecoder coder, int enc_frameSize, int bitrate, int sampfreq , int vad, int numChannels){
+	
+	int ok=0;
+	
     for (int k = 0; k < numChannels; k++) 
-  {
+    {
         ok=WebRtcVad_Create(&VAD_inst[k]);
         if (ok!=0) {
-      printf("Error: Couldn't allocate memory for VAD instance\n");
-      exit(0);
-    }
-    ok = WebRtcVad_Init(VAD_inst[k]);
-    if (ok == -1) {
-      printf("Error: Initialization of VAD struct failed\n");
-      exit(0);
-    }
+            printf("Error: Couldn't allocate memory for VAD instance\n");
+            exit(0);
+        }
+        ok=WebRtcVad_Init(VAD_inst[k]);
+        if (ok==-1) {
+            printf("Error: Initialization of VAD struct failed\n");	
+            exit(0); 
+        }
+
 
 #if (defined(CODEC_CNGCODEC8) || defined(CODEC_CNGCODEC16) || \
      defined(CODEC_CNGCODEC32) || defined(CODEC_CNGCODEC48))
@@ -953,81 +924,91 @@ int numChannels){
 
     switch (coder) {
 #ifdef CODEC_PCM16B
-    case webrtc::kDecoderPCM16B :
+      case webrtc::NetEqDecoder::kDecoderPCM16B:
 #endif
 #ifdef CODEC_PCM16B_WB
-    case webrtc::kDecoderPCM16Bwb :
+      case webrtc::NetEqDecoder::kDecoderPCM16Bwb:
 #endif
 #ifdef CODEC_PCM16B_32KHZ
-    case webrtc::kDecoderPCM16Bswb32kHz :
+      case webrtc::NetEqDecoder::kDecoderPCM16Bswb32kHz:
 #endif
 #ifdef CODEC_PCM16B_48KHZ
-    case webrtc::kDecoderPCM16Bswb48kHz :
+      case webrtc::NetEqDecoder::kDecoderPCM16Bswb48kHz:
 #endif
 #ifdef CODEC_G711
-    case webrtc::kDecoderPCMu :
-    case webrtc::kDecoderPCMa :
+      case webrtc::NetEqDecoder::kDecoderPCMu:
+      case webrtc::NetEqDecoder::kDecoderPCMa:
 #endif
         // do nothing
         break;
 #ifdef CODEC_G729
-    case webrtc::kDecoderG729:
-        if (sampfreq==8000) {
-            if ((enc_frameSize==80)||(enc_frameSize==160)||
-			(enc_frameSize==240)||(enc_frameSize==320)||
-			(enc_frameSize==400)||(enc_frameSize==480)) {
-                ok=WebRtcG729_CreateEnc(&G729enc_inst[k]);
-                if (ok!=0) {
-                    printf("Error: Couldn't allocate memory for G729 encoding instance\n");
-                    exit(0);
-                }
-            } else {
-                printf("\nError: g729 only supports 10, 20, 30, 40, 50 or 60 ms!!\n\n");
-                exit(0);
+      case webrtc::kDecoderG729:
+        if (sampfreq == 8000) {
+          if ((enc_frameSize == 80) || (enc_frameSize == 160) ||
+              (enc_frameSize == 240) || (enc_frameSize == 320) ||
+              (enc_frameSize == 400) || (enc_frameSize == 480)) {
+            ok = WebRtcG729_CreateEnc(&G729enc_inst[k]);
+            if (ok != 0) {
+              printf("Error: Couldn't allocate memory for G729 encoding "
+                     "instance\n");
+              exit(0);
             }
-            WebRtcG729_EncoderInit(G729enc_inst[k], vad);
-            if ((vad==1)&&(enc_frameSize!=80)) {
-                printf("\nError - This simulation only supports VAD for G729 at 10ms packets (not %dms)\n", (enc_frameSize>>3));
-            }
-        } else {
-            printf("\nError - g729 is only developed for 8kHz \n");
+          } else {
+            printf("\nError: g729 only supports 10, 20, 30, 40, 50 or 60 "
+                   "ms!!\n\n");
             exit(0);
+          }
+          WebRtcG729_EncoderInit(G729enc_inst[k], vad);
+          if ((vad == 1) && (enc_frameSize != 80)) {
+            printf("\nError - This simulation only supports VAD for G729 at "
+                   "10ms packets (not %" PRIuS "ms)\n", (enc_frameSize >> 3));
+          }
+        } else {
+          printf("\nError - g729 is only developed for 8kHz \n");
+          exit(0);
         }
         break;
 #endif
 #ifdef CODEC_G729_1
-    case webrtc::kDecoderG729_1:
-        if (sampfreq==16000) {
-            if ((enc_frameSize==320)||(enc_frameSize==640)||
-			(enc_frameSize==960)) {
-                    ok=WebRtcG7291_Create(&G729_1_inst[k]);
-                    if (ok!=0) {
-                        printf("Error: Couldn't allocate memory for G.729.1 codec instance\n");
-                        exit(0);
-                    }
-                } else {
-                    printf("\nError: G.729.1 only supports 20, 40 or 60 ms!!\n\n");
-                    exit(0);
-                }
-                if (!(((bitrate >= 12000) && (bitrate <= 32000) && (bitrate%2000 == 0)) || (bitrate == 8000))) {
-                    /* must be 8, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, or 32 kbps */
-                    printf("\nError: G.729.1 bitrate must be 8000 or 12000--32000 in steps of 2000 bps\n");
-                    exit(0);
-                }
-                WebRtcG7291_EncoderInit(G729_1_inst[k], bitrate, 0 /* flag8kHz*/, 0 /*flagG729mode*/);
-        } else {
-            printf("\nError - G.729.1 input is always 16 kHz \n");
+      case webrtc::kDecoderG729_1:
+        if (sampfreq == 16000) {
+          if ((enc_frameSize == 320) || (enc_frameSize == 640) ||
+              (enc_frameSize == 960)) {
+            ok = WebRtcG7291_Create(&G729_1_inst[k]);
+            if (ok != 0) {
+              printf("Error: Couldn't allocate memory for G.729.1 codec "
+                     "instance\n");
+              exit(0);
+            }
+          } else {
+            printf("\nError: G.729.1 only supports 20, 40 or 60 ms!!\n\n");
             exit(0);
+          }
+          if (!(((bitrate >= 12000) && (bitrate <= 32000) &&
+                 (bitrate % 2000 == 0)) ||
+                (bitrate == 8000))) {
+            /* must be 8, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, or 32 kbps */
+            printf("\nError: G.729.1 bitrate must be 8000 or 12000--32000 in "
+                   "steps of 2000 bps\n");
+            exit(0);
+          }
+          WebRtcG7291_EncoderInit(G729_1_inst[k], bitrate, 0 /* flag8kHz*/,
+                                  0 /*flagG729mode*/);
+        } else {
+          printf("\nError - G.729.1 input is always 16 kHz \n");
+          exit(0);
         }
         break;
 #endif
 #ifdef CODEC_SPEEX_8
-    case webrtc::kDecoderSPEEX_8 :
-        if (sampfreq==8000) {
-            if ((enc_frameSize==160)||(enc_frameSize==320)||(enc_frameSize==480)) {
-                ok=WebRtcSpeex_CreateEnc(&SPEEX8enc_inst[k], sampfreq);
-                if (ok!=0) {
-                    printf("Error: Couldn't allocate memory for Speex encoding instance\n");
+      case webrtc::kDecoderSPEEX_8:
+        if (sampfreq == 8000) {
+          if ((enc_frameSize == 160) || (enc_frameSize == 320) ||
+              (enc_frameSize == 480)) {
+            ok = WebRtcSpeex_CreateEnc(&SPEEX8enc_inst[k], sampfreq);
+            if (ok != 0) {
+              printf("Error: Couldn't allocate memory for Speex encoding "
+                     "instance\n");
               exit(0);
             }
           } else {
@@ -1035,23 +1016,30 @@ int numChannels){
             exit(0);
           }
           if ((vad == 1) && (enc_frameSize != 160)) {
-                printf("\nError - This simulation only supports VAD for Speex at 20ms packets (not %dms)\n", (enc_frameSize>>3));
+            printf("\nError - This simulation only supports VAD for Speex at "
+                   "20ms packets (not %" PRIuS "ms)\n",
+                (enc_frameSize >> 3));
             vad = 0;
           }
-            ok=WebRtcSpeex_EncoderInit(SPEEX8enc_inst[k], 0/*vbr*/, 3 /*complexity*/, vad);
-            if (ok!=0) exit(0);
+          ok = WebRtcSpeex_EncoderInit(SPEEX8enc_inst[k], 0 /*vbr*/,
+                                       3 /*complexity*/, vad);
+          if (ok != 0)
+            exit(0);
         } else {
-            printf("\nError - Speex8 called with sample frequency other than 8 kHz.\n\n");
+          printf("\nError - Speex8 called with sample frequency other than 8 "
+                 "kHz.\n\n");
         }
         break;
 #endif
 #ifdef CODEC_SPEEX_16
       case webrtc::kDecoderSPEEX_16:
         if (sampfreq == 16000) {
-            if ((enc_frameSize==320)||(enc_frameSize==640)||(enc_frameSize==960)) {
+          if ((enc_frameSize == 320) || (enc_frameSize == 640) ||
+              (enc_frameSize == 960)) {
             ok = WebRtcSpeex_CreateEnc(&SPEEX16enc_inst[k], sampfreq);
             if (ok != 0) {
-                    printf("Error: Couldn't allocate memory for Speex encoding instance\n");
+              printf("Error: Couldn't allocate memory for Speex encoding "
+                     "instance\n");
               exit(0);
             }
           } else {
@@ -1059,13 +1047,18 @@ int numChannels){
             exit(0);
           }
           if ((vad == 1) && (enc_frameSize != 320)) {
-                printf("\nError - This simulation only supports VAD for Speex at 20ms packets (not %dms)\n", (enc_frameSize>>4));
+            printf("\nError - This simulation only supports VAD for Speex at "
+                   "20ms packets (not %" PRIuS "ms)\n",
+                (enc_frameSize >> 4));
             vad = 0;
           }
-            ok=WebRtcSpeex_EncoderInit(SPEEX16enc_inst[k], 0/*vbr*/, 3 /*complexity*/, vad);
-            if (ok!=0) exit(0);
+          ok = WebRtcSpeex_EncoderInit(SPEEX16enc_inst[k], 0 /*vbr*/,
+                                       3 /*complexity*/, vad);
+          if (ok != 0)
+            exit(0);
         } else {
-            printf("\nError - Speex16 called with sample frequency other than 16 kHz.\n\n");
+          printf("\nError - Speex16 called with sample frequency other than 16 "
+                 "kHz.\n\n");
         }
         break;
 #endif
@@ -1194,13 +1187,13 @@ int numChannels){
         break;
 #endif
 #ifdef CODEC_G722
-    case webrtc::kDecoderG722 :
+      case webrtc::NetEqDecoder::kDecoderG722:
         if (sampfreq == 16000) {
           if (enc_frameSize % 2 == 0) {
           } else {
             printf(
-				"\nError - g722 frames must have an even number of 
-								enc_frameSize\n");
+                "\nError - g722 frames must have an even number of "
+                "enc_frameSize\n");
             exit(0);
           }
           WebRtcG722_CreateEncoder(&g722EncState[k]);
@@ -1239,11 +1232,11 @@ int numChannels){
         if (sampfreq == 16000) {
           ok = WebRtcAmrWb_CreateEnc(&AMRWBenc_inst[k]);
           if (ok != 0) {
-                printf("Error: Couldn't allocate memory for AMRWB encoding 
-				instance\n");
+            printf("Error: Couldn't allocate memory for AMRWB encoding "
+                   "instance\n");
             exit(0);
           }
-            if (((enc_frameSize/320)<0)||((enc_frameSize/320)>3)||((enc_frameSize%320)!=0)) {
+          if (((enc_frameSize / 320) > 3) || ((enc_frameSize % 320) != 0)) {
             printf("\nError - AMRwb must have frameSize of 20, 40 or 60ms\n");
             exit(0);
           }
@@ -1276,52 +1269,60 @@ int numChannels){
         break;
 #endif
 #ifdef CODEC_ILBC
-    case webrtc::kDecoderILBC :
-        if (sampfreq==8000) {
-            ok=WebRtcIlbcfix_EncoderCreate(&iLBCenc_inst[k]);
-            if (ok!=0) {
-                printf("Error: Couldn't allocate memory for iLBC encoding instance\n");
-                exit(0);
-            }
-            if ((enc_frameSize==160)||(enc_frameSize==240)||(enc_frameSize==320)||(enc_frameSize==480)) {				
-            } else {
-                printf("\nError - iLBC only supports 160, 240, 320 and 480 enc_frameSize (20, 30, 40 and 60 ms)\n");
-                exit(0);
-            }
-            if ((enc_frameSize==160)||(enc_frameSize==320)) {
-                /* 20 ms version */
-                WebRtcIlbcfix_EncoderInit(iLBCenc_inst[k], 20);
-            } else {
-                /* 30 ms version */
-                WebRtcIlbcfix_EncoderInit(iLBCenc_inst[k], 30);
-            }
-        } else {
-            printf("\nError - iLBC is only developed for 8kHz \n");
+      case webrtc::NetEqDecoder::kDecoderILBC:
+        if (sampfreq == 8000) {
+          ok = WebRtcIlbcfix_EncoderCreate(&iLBCenc_inst[k]);
+          if (ok != 0) {
+            printf("Error: Couldn't allocate memory for iLBC encoding "
+                   "instance\n");
             exit(0);
+          }
+          if ((enc_frameSize == 160) || (enc_frameSize == 240) ||
+              (enc_frameSize == 320) || (enc_frameSize == 480)) {
+          } else {
+            printf("\nError - iLBC only supports 160, 240, 320 and 480 "
+                   "enc_frameSize (20, 30, 40 and 60 ms)\n");
+            exit(0);
+          }
+          if ((enc_frameSize == 160) || (enc_frameSize == 320)) {
+            /* 20 ms version */
+            WebRtcIlbcfix_EncoderInit(iLBCenc_inst[k], 20);
+          } else {
+            /* 30 ms version */
+            WebRtcIlbcfix_EncoderInit(iLBCenc_inst[k], 30);
+          }
+        } else {
+          printf("\nError - iLBC is only developed for 8kHz \n");
+          exit(0);
         }
         break;
 #endif
 #ifdef CODEC_ISAC
-    case webrtc::kDecoderISAC:
-        if (sampfreq==16000) {
-            ok=WebRtcIsac_Create(&ISAC_inst[k]);
-            if (ok!=0) {
-                printf("Error: Couldn't allocate memory for iSAC instance\n");
-                exit(0);
-            }if ((enc_frameSize==480)||(enc_frameSize==960)) {
-            } else {
-                printf("\nError - iSAC only supports frameSize (30 and 60 ms)\n");
-                exit(0);
-            }
-            WebRtcIsac_EncoderInit(ISAC_inst[k],1);
-            if ((bitrate<10000)||(bitrate>32000)) {
-                printf("\nError - iSAC bitrate has to be between 10000 and 32000 bps (not %i)\n", bitrate);
-                exit(0);
-            }
-            WebRtcIsac_Control(ISAC_inst[k], bitrate, enc_frameSize>>4);
-        } else {
-            printf("\nError - iSAC only supports 480 or 960 enc_frameSize (30 or 60 ms)\n");
+      case webrtc::NetEqDecoder::kDecoderISAC:
+        if (sampfreq == 16000) {
+          ok = WebRtcIsac_Create(&ISAC_inst[k]);
+          if (ok != 0) {
+            printf("Error: Couldn't allocate memory for iSAC instance\n");
             exit(0);
+          }
+          if ((enc_frameSize == 480) || (enc_frameSize == 960)) {
+          } else {
+            printf("\nError - iSAC only supports frameSize (30 and 60 ms)\n");
+            exit(0);
+          }
+          WebRtcIsac_EncoderInit(ISAC_inst[k], 1);
+          if ((bitrate < 10000) || (bitrate > 32000)) {
+            printf("\nError - iSAC bitrate has to be between 10000 and 32000 "
+                   "bps (not %i)\n",
+                bitrate);
+            exit(0);
+          }
+          WebRtcIsac_Control(ISAC_inst[k], bitrate,
+                             static_cast<int>(enc_frameSize >> 4));
+        } else {
+          printf("\nError - iSAC only supports 480 or 960 enc_frameSize (30 or "
+                 "60 ms)\n");
+          exit(0);
         }
         break;
 #endif
@@ -1332,25 +1333,28 @@ int numChannels){
           if (ok != 0) {
             printf("Error: Couldn't allocate memory for iSAC instance\n");
             exit(0);
-            }if ((enc_frameSize==480)||(enc_frameSize==960)) {
+          }
+          if ((enc_frameSize == 480) || (enc_frameSize == 960)) {
           } else {
             printf("\nError - iSAC only supports frameSize (30 and 60 ms)\n");
             exit(0);
           }
           WebRtcIsacfix_EncoderInit(ISAC_inst[k], 1);
           if ((bitrate < 10000) || (bitrate > 32000)) {
-                printf("\nError - iSAC bitrate has to be between 10000 and 32000 bps (not %i)\n", bitrate);
+            printf("\nError - iSAC bitrate has to be between 10000 and 32000 "
+                   "bps (not %i)\n", bitrate);
             exit(0);
           }
           WebRtcIsacfix_Control(ISAC_inst[k], bitrate, enc_frameSize >> 4);
         } else {
-            printf("\nError - iSAC only supports 480 or 960 enc_frameSize (30 or 60 ms)\n");
+          printf("\nError - iSAC only supports 480 or 960 enc_frameSize (30 or "
+                 "60 ms)\n");
           exit(0);
         }
         break;
 #endif
 #ifdef CODEC_ISAC_SWB
-    case webrtc::kDecoderISACswb:
+      case webrtc::NetEqDecoder::kDecoderISACswb:
         if (sampfreq == 32000) {
           ok = WebRtcIsac_Create(&ISACSWB_inst[k]);
           if (ok != 0) {
@@ -1381,12 +1385,15 @@ int numChannels){
           }
           WebRtcIsac_EncoderInit(ISACSWB_inst[k], 1);
           if ((bitrate < 32000) || (bitrate > 56000)) {
-                printf("\nError - iSAC SWB bitrate has to be between 32000 and 56000 bps (not %i)\n", bitrate);
+            printf("\nError - iSAC SWB bitrate has to be between 32000 and "
+                   "56000 bps (not %i)\n", bitrate);
             exit(0);
           }
-            WebRtcIsac_Control(ISACSWB_inst[k], bitrate, enc_frameSize>>5);
+          WebRtcIsac_Control(ISACSWB_inst[k], bitrate,
+                             static_cast<int>(enc_frameSize >> 5));
         } else {
-            printf("\nError - iSAC SWB only supports 960 enc_frameSize (30 ms)\n");
+          printf("\nError - iSAC SWB only supports 960 enc_frameSize (30 "
+                 "ms)\n");
           exit(0);
         }
         break;
@@ -1396,10 +1403,12 @@ int numChannels){
         if (sampfreq == 8000) {
           ok = WebRtcGSMFR_CreateEnc(&GSMFRenc_inst[k]);
           if (ok != 0) {
-                printf("Error: Couldn't allocate memory for GSM FR encoding instance\n");
+            printf("Error: Couldn't allocate memory for GSM FR encoding "
+                   "instance\n");
             exit(0);
           }
-            if ((enc_frameSize==160)||(enc_frameSize==320)||(enc_frameSize==480)) {			
+          if ((enc_frameSize == 160) || (enc_frameSize == 320) ||
+              (enc_frameSize == 480)) {
           } else {
             printf("\nError - GSM FR must have a multiple of 160 "
                    "enc_frameSize\n");
@@ -1427,124 +1436,125 @@ int numChannels){
 }
 
 
+
+
 int NetEQTest_free_coders(webrtc::NetEqDecoder coder, int numChannels) {
 
     for (int k = 0; k < numChannels; k++)
     {
         WebRtcVad_Free(VAD_inst[k]);
 #if (defined(CODEC_CNGCODEC8) || defined(CODEC_CNGCODEC16) || \
-    defined(CODEC_CNGCODEC32) || defined(CODEC_CNGCODEC48))
-        WebRtcCng_FreeEnc(CNGenc_inst[k]);
+     defined(CODEC_CNGCODEC32) || defined(CODEC_CNGCODEC48))
+    WebRtcCng_FreeEnc(CNGenc_inst[k]);
 #endif
 
-        switch (coder) 
-        {
+    switch (coder) {
 #ifdef CODEC_PCM16B
-        case webrtc::kDecoderPCM16B :
+      case webrtc::NetEqDecoder::kDecoderPCM16B:
 #endif
 #ifdef CODEC_PCM16B_WB
-        case webrtc::kDecoderPCM16Bwb :
+      case webrtc::NetEqDecoder::kDecoderPCM16Bwb:
 #endif
 #ifdef CODEC_PCM16B_32KHZ
-        case webrtc::kDecoderPCM16Bswb32kHz :
+      case webrtc::NetEqDecoder::kDecoderPCM16Bswb32kHz:
 #endif
 #ifdef CODEC_PCM16B_48KHZ
-        case webrtc::kDecoderPCM16Bswb48kHz :
+      case webrtc::NetEqDecoder::kDecoderPCM16Bswb48kHz:
 #endif
 #ifdef CODEC_G711
-        case webrtc::kDecoderPCMu :
-        case webrtc::kDecoderPCMa :
+      case webrtc::NetEqDecoder::kDecoderPCMu:
+      case webrtc::NetEqDecoder::kDecoderPCMa:
 #endif
         // do nothing
         break;
 #ifdef CODEC_G729
-        case webrtc::kDecoderG729:
+      case webrtc::NetEqDecoder::kDecoderG729:
         WebRtcG729_FreeEnc(G729enc_inst[k]);
         break;
 #endif
 #ifdef CODEC_G729_1
-        case webrtc::kDecoderG729_1:
+      case webrtc::NetEqDecoder::kDecoderG729_1:
         WebRtcG7291_Free(G729_1_inst[k]);
         break;
 #endif
 #ifdef CODEC_SPEEX_8
-        case webrtc::kDecoderSPEEX_8 :
+      case webrtc::NetEqDecoder::kDecoderSPEEX_8:
         WebRtcSpeex_FreeEnc(SPEEX8enc_inst[k]);
         break;
 #endif
 #ifdef CODEC_SPEEX_16
-        case webrtc::kDecoderSPEEX_16 :
+      case webrtc::NetEqDecoder::kDecoderSPEEX_16:
         WebRtcSpeex_FreeEnc(SPEEX16enc_inst[k]);
         break;
 #endif
 
 #ifdef CODEC_G722_1_16
-        case webrtc::kDecoderG722_1_16 :
+      case webrtc::NetEqDecoder::kDecoderG722_1_16:
         WebRtcG7221_FreeEnc16(G722_1_16enc_inst[k]);
         break;
 #endif
 #ifdef CODEC_G722_1_24
-        case webrtc::kDecoderG722_1_24 :
+      case webrtc::NetEqDecoder::kDecoderG722_1_24:
         WebRtcG7221_FreeEnc24(G722_1_24enc_inst[k]);
         break;
 #endif
 #ifdef CODEC_G722_1_32
-        case webrtc::kDecoderG722_1_32 :
+      case webrtc::NetEqDecoder::kDecoderG722_1_32:
         WebRtcG7221_FreeEnc32(G722_1_32enc_inst[k]);
         break;
 #endif
 #ifdef CODEC_G722_1C_24
-        case webrtc::kDecoderG722_1C_24 :
+      case webrtc::NetEqDecoder::kDecoderG722_1C_24:
         WebRtcG7221C_FreeEnc24(G722_1C_24enc_inst[k]);
         break;
 #endif
 #ifdef CODEC_G722_1C_32
-        case webrtc::kDecoderG722_1C_32 :
+      case webrtc::NetEqDecoder::kDecoderG722_1C_32:
         WebRtcG7221C_FreeEnc32(G722_1C_32enc_inst[k]);
         break;
 #endif
 #ifdef CODEC_G722_1C_48
-        case webrtc::kDecoderG722_1C_48 :
+      case webrtc::NetEqDecoder::kDecoderG722_1C_48:
         WebRtcG7221C_FreeEnc48(G722_1C_48enc_inst[k]);
         break;
 #endif
 #ifdef CODEC_G722
-        case webrtc::kDecoderG722 :
+      case webrtc::NetEqDecoder::kDecoderG722:
         WebRtcG722_FreeEncoder(g722EncState[k]);
         break;
 #endif
 #ifdef CODEC_AMR
-        case webrtc::kDecoderAMR :
+      case webrtc::NetEqDecoder::kDecoderAMR:
         WebRtcAmr_FreeEnc(AMRenc_inst[k]);
         break;
 #endif
 #ifdef CODEC_AMRWB
-        case webrtc::kDecoderAMRWB :
+      case webrtc::NetEqDecoder::kDecoderAMRWB:
         WebRtcAmrWb_FreeEnc(AMRWBenc_inst[k]);
         break;
 #endif
 #ifdef CODEC_ILBC
-        case webrtc::kDecoderILBC :
+      case webrtc::NetEqDecoder::kDecoderILBC:
         WebRtcIlbcfix_EncoderFree(iLBCenc_inst[k]);
         break;
 #endif
 #ifdef CODEC_ISAC
-        case webrtc::kDecoderISAC:
+      case webrtc::NetEqDecoder::kDecoderISAC:
         WebRtcIsac_Free(ISAC_inst[k]);
         break;
 #endif
 #ifdef NETEQ_ISACFIX_CODEC
-        case webrtc::kDecoderISAC:
+      case webrtc::NetEqDecoder::kDecoderISAC:
         WebRtcIsacfix_Free(ISAC_inst[k]);
         break;
 #endif
 #ifdef CODEC_ISAC_SWB
-        case webrtc::kDecoderISACswb:
+      case webrtc::NetEqDecoder::kDecoderISACswb:
         WebRtcIsac_Free(ISACSWB_inst[k]);
         break;
 #endif
 #ifdef CODEC_GSMFR
-        case webrtc::kDecoderGSMFR:
+      case webrtc::NetEqDecoder::kDecoderGSMFR:
         WebRtcGSMFR_FreeEnc(GSMFRenc_inst[k]);
         break;
 #endif
@@ -1567,23 +1577,24 @@ int NetEQTest_encode(int coder, int16_t *indata, int frameLen, unsigned char * e
 						  int * vad, int useVAD, int bitrate, int numChannels){
 
 	short cdlen = 0;
-  int16_t* tempdata;
-  static int first_cng = 1;
+	int16_t *tempdata;
+	static int first_cng=1;
 	int16_t tempLen;
-  *vad = 1;
 
-  // check VAD first
+	*vad =1;
+
+    // check VAD first
 	if(useVAD)
     {
-    *vad = 0;
+        *vad = 0;
 
         for (int k = 0; k < numChannels; k++)
         {
-      tempLen = frameLen;
-      tempdata = &indata[k * frameLen];
-      int localVad = 0;
-      /* Partition the signal and test each chunk for VAD.
-         All chunks must be VAD=0 to produce a total VAD=0. */
+            tempLen = frameLen;
+            tempdata = &indata[k*frameLen];
+            int localVad=0;
+            /* Partition the signal and test each chunk for VAD.
+            All chunks must be VAD=0 to produce a total VAD=0. */
             while (tempLen >= 10*sampleRate/1000) {
                 if ((tempLen % 30*sampleRate/1000) == 0) { // tempLen is multiple of 30ms
                     localVad |= WebRtcVad_Process(VAD_inst[k] ,sampleRate, tempdata, 30*sampleRate/1000);
@@ -1596,73 +1607,70 @@ int NetEQTest_encode(int coder, int16_t *indata, int frameLen, unsigned char * e
                     tempLen -= 20*sampleRate/1000;
                 }
                 else { // use 10ms
-          localVad |= WebRtcVad_Process(VAD_inst[k], sampleRate, tempdata,
-					10*sampleRate/1000);
+                    localVad |= WebRtcVad_Process(VAD_inst[k] ,sampleRate, tempdata, 10*sampleRate/1000);
                     tempdata += 10*sampleRate/1000;
                     tempLen -= 10*sampleRate/1000;
+                }
+            }
+
+            // aggregate all VAD decisions over all channels
+            *vad |= localVad;
         }
-      }
 
-      // aggregate all VAD decisions over all channels
-      *vad |= localVad;
-    }
-
-    if (!*vad) {
-      // all channels are silent
-      cdlen = 0;
+        if(!*vad){
+            // all channels are silent
+            cdlen = 0;
             for (int k = 0; k < numChannels; k++)
             {
                 WebRtcCng_Encode(CNGenc_inst[k],&indata[k*frameLen], (frameLen <= 640 ? frameLen : 640) /* max 640 */,
-                         encoded, &tempLen, first_cng);
-        encoded += tempLen;
-        cdlen += tempLen;
-      }
-      *vad = 0;
-      first_cng = 0;
-      return (cdlen);
-    }
-  }
+                    encoded,&tempLen,first_cng);
+                encoded += tempLen;
+                cdlen += tempLen;
+            }
+            *vad=0;
+            first_cng=0;
+            return(cdlen);
+        }
+	}
 
-  // loop over all channels
+
+    // loop over all channels
     int totalLen = 0;
 
     for (int k = 0; k < numChannels; k++)
     {
-    /* Encode with the selected coder type */
+        /* Encode with the selected coder type */
         if (coder==webrtc::kDecoderPCMu) { /*g711 u-law */
 #ifdef CODEC_G711
-      cdlen = WebRtcG711_EncodeU(indata, frameLen, encoded);
+            cdlen = WebRtcG711_EncodeU(indata, frameLen, encoded);
 #endif
-  }
- else if (coder == webrtc::NetEqDecoder::kDecoderPCMa) { /*g711 A-law */
+        }  
+        else if (coder==webrtc::kDecoderPCMa) { /*g711 A-law */
 #ifdef CODEC_G711
-      cdlen = WebRtcG711_EncodeA(indata, frameLen, encoded);
-    }
+            cdlen = WebRtcG711_EncodeA(indata, frameLen, encoded);
+        }
 #endif
 #ifdef CODEC_PCM16B
         else if ((coder==webrtc::kDecoderPCM16B)||(coder==webrtc::kDecoderPCM16Bwb)||
-		(coder==webrtc::kDecoderPCM16Bswb32kHz)||(coder==webrtc::kDecoderPCM16Bswb48kHz)) { 
-			/*pcm16b (8kHz, 16kHz, 32kHz or 48kHz) */
-
-      cdlen = WebRtcPcm16b_Encode(indata, frameLen, encoded);
-    }
+            (coder==webrtc::kDecoderPCM16Bswb32kHz)||(coder==webrtc::kDecoderPCM16Bswb48kHz)) { /*pcm16b (8kHz, 16kHz, 32kHz or 48kHz) */
+                cdlen = WebRtcPcm16b_Encode(indata, frameLen, encoded);
+            }
 #endif
 #ifdef CODEC_G722
         else if (coder==webrtc::kDecoderG722) { /*g722 */
-      cdlen = WebRtcG722_Encode(g722EncState[k], indata, frameLen, encoded);
-      assert(cdlen == frameLen >> 1);
-    }
+            cdlen=WebRtcG722_Encode(g722EncState[k], indata, frameLen, encoded);
+            assert(cdlen == frameLen>>1);
+        }
 #endif
 #ifdef CODEC_ILBC
         else if (coder==webrtc::kDecoderILBC) { /*iLBC */
             cdlen = WebRtcIlbcfix_Encode(iLBCenc_inst[k], indata,
                                          frameLen, encoded);
-    }
+        }
 #endif
 #if (defined(CODEC_ISAC) || defined(NETEQ_ISACFIX_CODEC)) // TODO(hlundin): remove all NETEQ_ISACFIX_CODEC
-                                              // NETEQ_ISACFIX_CODEC
         else if (coder==webrtc::kDecoderISAC) { /*iSAC */
-      int noOfCalls = 0;
+            int noOfCalls=0;
             cdlen=0;
             while (cdlen<=0) {
 #ifdef CODEC_ISAC /* floating point */
@@ -1672,11 +1680,11 @@ int NetEQTest_encode(int coder, int16_t *indata, int frameLen, unsigned char * e
 #else /* fixed point */
                 cdlen = WebRtcIsacfix_Encode(ISAC_inst[k],
                                              &indata[noOfCalls * 160],
-                                   encoded);
+                                             encoded);
 #endif
-        noOfCalls++;
-      }
-    }
+                noOfCalls++;
+            }
+        }
 #endif
 #ifdef CODEC_ISAC_SWB
         else if (coder==webrtc::kDecoderISACswb) { /* iSAC SWB */
@@ -1684,10 +1692,10 @@ int NetEQTest_encode(int coder, int16_t *indata, int frameLen, unsigned char * e
             cdlen=0;
             while (cdlen<=0) {
                 cdlen = WebRtcIsac_Encode(ISACSWB_inst[k],
-		&indata[noOfCalls * 320],
-                                encoded);
-        noOfCalls++;
-      }
+                                          &indata[noOfCalls * 320],
+                                          encoded);
+                noOfCalls++;
+            }
     }
 #endif
     indata += frameLen;
@@ -1765,11 +1773,9 @@ int makeRedundantHeader(unsigned char* rtp_data,
   return rtpPointer - rtp_data;  // length of header in bytes
 }
 
-int makeDTMFpayload(unsigned char* payload_data, 
-                       int Event,
-                       int End,
-                       int Volume,
-                       int Duration) {
+
+
+int makeDTMFpayload(unsigned char* payload_data, int Event, int End, int Volume, int Duration) {
   unsigned char E, R, V;
   R = 0;
   V = (unsigned char)Volume;

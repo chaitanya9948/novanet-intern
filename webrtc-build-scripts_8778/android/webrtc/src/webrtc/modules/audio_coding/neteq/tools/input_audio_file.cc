@@ -7,8 +7,13 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+ /********************
+Edited by Chaitanya Rajesh
 
+*/
 #include "webrtc/modules/audio_coding/neteq/tools/input_audio_file.h"
+
+#include "webrtc/base/checks.h"
 
 namespace webrtc {
 namespace test {
@@ -37,6 +42,26 @@ bool InputAudioFile::Read(size_t samples, int16_t* destination) {
   return true;
 }
 
+bool InputAudioFile::Seek(int samples) {
+  if (!fp_) {
+    return false;
+  }
+  // Find file boundaries.
+  const long current_pos = ftell(fp_);
+  CHECK_NE(EOF, current_pos)
+      << "Error returned when getting file position.";
+CHECK_EQ(0, fseek(fp_, 0, SEEK_END));  // Move to end of file.
+  const long file_size = ftell(fp_);
+CHECK_NE(EOF, file_size) << "Error returned when getting file position.";
+  // Find new position.
+  long new_pos = current_pos + sizeof(int16_t) * samples;  // Samples to bytes.
+CHECK_GE(new_pos, 0)
+      << "Trying to move to before the beginning of the file";
+  new_pos = new_pos % file_size;  // Wrap around the end of the file.
+  // Move to new position relative to the beginning of the file.
+CHECK_EQ(0, fseek(fp_, new_pos, SEEK_SET));
+  return true;
+}
 void InputAudioFile::DuplicateInterleaved(const int16_t* source, size_t samples,
                                           size_t channels,
                                           int16_t* destination) {

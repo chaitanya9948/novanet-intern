@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/decision_logic_normal.h"
 
 #include <assert.h>
@@ -132,15 +134,13 @@ Operations DecisionLogicNormal::ExpectedPacketAvailable(Modes prev_mode,
     // Check criterion for time-stretching.
     int low_limit, high_limit;
     delay_manager_->BufferLimits(&low_limit, &high_limit);
-    if ((buffer_level_filter_->filtered_current_level() >= high_limit &&
-        TimescaleAllowed()) ||
-        buffer_level_filter_->filtered_current_level() >= high_limit << 2) {
-      // Buffer level higher than limit and time-scaling allowed,
-      // or buffer level really high.
+    if (buffer_level_filter_->filtered_current_level() >= high_limit << 2)
       return kAccelerate;
-    } else if ((buffer_level_filter_->filtered_current_level() < low_limit)
-        && TimescaleAllowed()) {
-      return kPreemptiveExpand;
+    if (TimescaleAllowed()) {
+      if (buffer_level_filter_->filtered_current_level() >= high_limit)
+        return kAccelerate;
+      if (buffer_level_filter_->filtered_current_level() < low_limit)
+        return kPreemptiveExpand;
     }
   }
   return kNormal;

@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "utility.h"
 
 #include <assert.h>
@@ -277,32 +279,6 @@ bool FixedPayloadTypeCodec(const char* payloadName) {
     }
   }
   return false;
-}
-
-DTMFDetector::DTMFDetector() {
-  for (int16_t n = 0; n < 1000; n++) {
-    _toneCntr[n] = 0;
-  }
-}
-
-DTMFDetector::~DTMFDetector() {
-}
-
-int32_t DTMFDetector::IncomingDtmf(const uint8_t digitDtmf,
-                                   const bool /* toneEnded */) {
-  fprintf(stdout, "%d-", digitDtmf);
-  _toneCntr[digitDtmf]++;
-  return 0;
-}
-
-void DTMFDetector::PrintDetectedDigits() {
-  for (int16_t n = 0; n < 1000; n++) {
-    if (_toneCntr[n] > 0) {
-      fprintf(stdout, "%d %u  msec, \n", n, _toneCntr[n] * 10);
-    }
-  }
-  fprintf(stdout, "\n");
-  return;
 }
 
 void VADCallback::Reset() {

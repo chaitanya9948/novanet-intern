@@ -27,7 +27,9 @@
 // 770 Hz      4        5        6       13
 // 852 Hz      7        8        9       14
 // 941 Hz     10        0       11       15
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/dtmf_tone_generator.h"
 
 #include <assert.h>
@@ -187,6 +189,10 @@ int DtmfToneGenerator::Generate(int num_samples,
   }
 
   return num_samples;
+}
+
+bool DtmfToneGenerator::initialized() const {
+  return initialized_;
 }
 
 }  // namespace webrtc

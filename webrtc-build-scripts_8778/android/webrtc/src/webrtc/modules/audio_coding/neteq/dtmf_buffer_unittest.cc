@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/dtmf_buffer.h"
 
 #ifdef WIN32
@@ -76,12 +78,6 @@ TEST(DtmfBuffer, ParseEvent) {
   EXPECT_EQ(event_no, event.event_no);
   EXPECT_EQ(timestamp, event.timestamp);
   EXPECT_EQ(volume, event.volume);
-
-  EXPECT_EQ(DtmfBuffer::kInvalidPointer,
-            DtmfBuffer::ParseEvent(timestamp, NULL, 4, &event));
-
-  EXPECT_EQ(DtmfBuffer::kInvalidPointer,
-            DtmfBuffer::ParseEvent(timestamp, payload_ptr, 4, NULL));
 
   EXPECT_EQ(DtmfBuffer::kPayloadTooShort,
             DtmfBuffer::ParseEvent(timestamp, payload_ptr, 3, &event));

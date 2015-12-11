@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_INTERFACE_NETEQ_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_INTERFACE_NETEQ_H_
 
@@ -75,18 +77,24 @@ class NetEq {
     Config()
         : sample_rate_hz(16000),
           enable_audio_classifier(false),
+          enable_post_decode_vad(false),
           max_packets_in_buffer(50),
           // |max_delay_ms| has the same effect as calling SetMaximumDelay().
           max_delay_ms(2000),
           background_noise_mode(kBgnOff),
-          playout_mode(kPlayoutOn) {}
+          playout_mode(kPlayoutOn),
+          enable_fast_accelerate(false) {}
 
-    int sample_rate_hz;  // Initial vale. Will change with input data.
+    std::string ToString() const;
+
+    int sample_rate_hz;  // Initial value. Will change with input data.
     bool enable_audio_classifier;
+    bool enable_post_decode_vad;
     int max_packets_in_buffer;
     int max_delay_ms;
     BackgroundNoiseMode background_noise_mode;
     NetEqPlayoutMode playout_mode;
+    bool enable_fast_accelerate;
   };
 
   enum ReturnCodes {

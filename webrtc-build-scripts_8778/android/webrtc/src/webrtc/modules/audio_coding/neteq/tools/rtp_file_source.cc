@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/tools/rtp_file_source.h"
 
 #include <assert.h>
@@ -47,7 +49,7 @@ Packet* RtpFileSource::NextPacket() {
     if (!rtp_reader_->NextPacket(&temp_packet)) {
       return NULL;
     }
-    if (temp_packet.length == 0) {
+    if (temp_packet.original_length == 0) {
       // May be an RTCP packet.
       // Read the next one.
       continue;

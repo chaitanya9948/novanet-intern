@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/decoder_database.h"
 
 #include <assert.h>
@@ -151,10 +153,10 @@ bool DecoderDatabase::IsType(uint8_t rtp_payload_type,
 }
 
 bool DecoderDatabase::IsComfortNoise(uint8_t rtp_payload_type) const {
-  if (IsType(rtp_payload_type, kDecoderCNGnb) ||
-      IsType(rtp_payload_type, kDecoderCNGwb) ||
-      IsType(rtp_payload_type, kDecoderCNGswb32kHz) ||
-      IsType(rtp_payload_type, kDecoderCNGswb48kHz)) {
+  if (IsType(rtp_payload_type, NetEqDecoder::kDecoderCNGnb) ||
+      IsType(rtp_payload_type, NetEqDecoder::kDecoderCNGwb) ||
+      IsType(rtp_payload_type, NetEqDecoder::kDecoderCNGswb32kHz) ||
+      IsType(rtp_payload_type, NetEqDecoder::kDecoderCNGswb48kHz)) {
     return true;
   } else {
     return false;
@@ -162,11 +164,11 @@ bool DecoderDatabase::IsComfortNoise(uint8_t rtp_payload_type) const {
 }
 
 bool DecoderDatabase::IsDtmf(uint8_t rtp_payload_type) const {
-  return IsType(rtp_payload_type, kDecoderAVT);
+  return IsType(rtp_payload_type, NetEqDecoder::kDecoderAVT);
 }
 
 bool DecoderDatabase::IsRed(uint8_t rtp_payload_type) const {
-  return IsType(rtp_payload_type, kDecoderRED);
+  return IsType(rtp_payload_type, NetEqDecoder::kDecoderRED);
 }
 
 int DecoderDatabase::SetActiveDecoder(uint8_t rtp_payload_type,

@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/neteq_impl.h"
 
 #include <assert.h>
@@ -84,7 +86,7 @@ NetEqImpl::NetEqImpl(const NetEq::Config& config,
       new_codec_(false),
       timestamp_(0),
       reset_decoder_(false),
-      current_rtp_payload_type_(0xFF),  // Invalid RTP payload type.
+      current_rtp_payload_type_(0xFF),      // Invalid RTP payload type.
       current_cng_rtp_payload_type_(0xFF),  // Invalid RTP payload type.
       ssrc_(0),
       first_packet_(true),
@@ -911,13 +913,15 @@ int NetEqImpl::GetDecision(Operations* operation,
       last_mode_ == kModePreemptiveExpandSuccess ||
       last_mode_ == kModePreemptiveExpandLowEnergy) {
     // Subtract (samples_left + output_size_samples_) from sampleMemory.
-    decision_logic_->AddSampleMemory(-(samples_left + output_size_samples_));
+    decision_logic_->AddSampleMemory(
+-(samples_left + output_size_samples_));
   }
 
   // Check if it is time to play a DTMF event.
-  if (dtmf_buffer_->GetEvent(end_timestamp +
-                             decision_logic_->generated_noise_samples(),
-                             dtmf_event)) {
+  if (dtmf_buffer_->GetEvent(
+  
+end_timestamp + decision_logic_->generated_noise_samples(),
+  dtmf_event)) {
     *play_dtmf = true;
   }
 

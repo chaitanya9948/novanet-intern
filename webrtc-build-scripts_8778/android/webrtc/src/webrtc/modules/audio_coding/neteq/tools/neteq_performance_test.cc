@@ -7,7 +7,10 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+/********************
+Edited by Chaitanya Rajesh
 
+*/
 #include "webrtc/modules/audio_coding/neteq/tools/neteq_performance_test.h"
 
 #include "webrtc/modules/audio_coding/codecs/pcm16b/include/pcm16b.h"
@@ -32,7 +35,8 @@ int64_t NetEqPerformanceTest::Run(int runtime_ms,
   const std::string kInputFileName =
       webrtc::test::ResourcePath("audio_coding/testfile32kHz", "pcm");
   const int kSampRateHz = 32000;
-  const webrtc::NetEqDecoder kDecoderType = webrtc::kDecoderPCM16Bswb32kHz;
+  const webrtc::NetEqDecoder kDecoderType =
+  webrtc::NetEqDecoder::kDecoderPCM16Bswb32kHz;
   const int kPayloadType = 95;
 
   // Initialize NetEq instance.
@@ -61,8 +65,9 @@ int64_t NetEqPerformanceTest::Run(int runtime_ms,
   bool drift_flipped = false;
   int32_t packet_input_time_ms =
       rtp_gen.GetRtpHeader(kPayloadType, kInputBlockSizeSamples, &rtp_header);
-  const int16_t* input_samples = audio_loop.GetNextBlock();
-  if (!input_samples) exit(1);
+  auto input_samples = audio_loop.GetNextBlock();
+  if (!input_samples) 
+  exit(1);
   uint8_t input_payload[kInputBlockSizeSamples * sizeof(int16_t)];
   size_t payload_len =
       WebRtcPcm16b_Encode(input_samples, kInputBlockSizeSamples, input_payload);
@@ -80,8 +85,7 @@ int64_t NetEqPerformanceTest::Run(int runtime_ms,
       }
       if (!lost) {
         // Insert packet.
-        int error = neteq->InsertPacket(
-            rtp_header, input_payload, payload_len,
+        int error = neteq->InsertPacket(rtp_header, input_payload, payload_len,
             packet_input_time_ms * kSampRateHz / 1000);
         if (error != NetEq::kOK)
           return -1;
@@ -92,7 +96,8 @@ int64_t NetEqPerformanceTest::Run(int runtime_ms,
                                                   kInputBlockSizeSamples,
                                                   &rtp_header);
       input_samples = audio_loop.GetNextBlock();
-      if (!input_samples) return -1;
+      if (!input_samples) 
+	  return -1;
       payload_len = WebRtcPcm16b_Encode(const_cast<int16_t*>(input_samples),
                                         kInputBlockSizeSamples,
                                         input_payload);
@@ -101,10 +106,10 @@ int64_t NetEqPerformanceTest::Run(int runtime_ms,
 
     // Get output audio, but don't do anything with it.
     static const int kMaxChannels = 1;
-    static const int kMaxSamplesPerMs = 48000 / 1000;
+    static const size_t kMaxSamplesPerMs = 48000 / 1000;
     static const int kOutputBlockSizeMs = 10;
-    static const int kOutDataLen = kOutputBlockSizeMs * kMaxSamplesPerMs *
-        kMaxChannels;
+    static const size_t kOutDataLen =
+        kOutputBlockSizeMs * kMaxSamplesPerMs * kMaxChannels;
     int16_t out_data[kOutDataLen];
     int num_channels;
     int samples_per_channel;
@@ -113,7 +118,7 @@ int64_t NetEqPerformanceTest::Run(int runtime_ms,
     if (error != NetEq::kOK)
       return -1;
 
-    assert(samples_per_channel == kSampRateHz * 10 / 1000);
+    assert(samples_per_channel == static_cast<size_t>(kSampRateHz * 10 / 1000));
 
     time_now_ms += kOutputBlockSizeMs;
     if (time_now_ms >= runtime_ms / 2 && !drift_flipped) {

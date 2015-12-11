@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/main/acm2/acm_receiver.h"
 
 #include <algorithm>  // std::min
@@ -239,21 +241,6 @@ TEST_F(AcmReceiverTestOldApi, DISABLED_ON_ANDROID(SampleRate)) {
               receiver_->current_sample_rate_hz());
     ++n;
   }
-}
-
-// Verify that the playout mode is set correctly.
-TEST_F(AcmReceiverTestOldApi, DISABLED_ON_ANDROID(PlayoutMode)) {
-  receiver_->SetPlayoutMode(voice);
-  EXPECT_EQ(voice, receiver_->PlayoutMode());
-
-  receiver_->SetPlayoutMode(streaming);
-  EXPECT_EQ(streaming, receiver_->PlayoutMode());
-
-  receiver_->SetPlayoutMode(fax);
-  EXPECT_EQ(fax, receiver_->PlayoutMode());
-
-  receiver_->SetPlayoutMode(off);
-  EXPECT_EQ(off, receiver_->PlayoutMode());
 }
 
 TEST_F(AcmReceiverTestOldApi, DISABLED_ON_ANDROID(PostdecodingVad)) {

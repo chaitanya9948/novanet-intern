@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/main/acm2/acm_resampler.h"
 
 #include <assert.h>
@@ -31,15 +33,15 @@ int ACMResampler::Resample10Msec(const int16_t* in_audio,
                                  int num_audio_channels,
                                  int out_capacity_samples,
                                  int16_t* out_audio) {
-  int in_length = in_freq_hz * num_audio_channels / 100;
+  size_t in_length = static_cast<size_t>(in_freq_hz * num_audio_channels / 100);
   int out_length = out_freq_hz * num_audio_channels / 100;
   if (in_freq_hz == out_freq_hz) {
-    if (out_capacity_samples < in_length) {
+    if (out_capacity_samples < static_cast<int>(in_length)) {
       assert(false);
       return -1;
     }
     memcpy(out_audio, in_audio, in_length * sizeof(int16_t));
-    return in_length / num_audio_channels;
+    return static_cast<int>(in_length / num_audio_channels);
   }
 
   if (resampler_.InitializeIfNeeded(in_freq_hz, out_freq_hz,

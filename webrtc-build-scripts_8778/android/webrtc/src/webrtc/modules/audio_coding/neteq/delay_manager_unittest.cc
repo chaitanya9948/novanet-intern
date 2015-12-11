@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+ /********************
+Edited by Chaitanya Rajesh
+*/
 // Unit tests for DelayManager class.
 
 #include "webrtc/modules/audio_coding/neteq/delay_manager.h"
@@ -88,7 +90,7 @@ TEST_F(DelayManagerTest, VectorInitialization) {
   const DelayManager::IATVector& vec = dm_->iat_vector();
   double sum = 0.0;
   for (size_t i = 0; i < vec.size(); i++) {
-    EXPECT_NEAR(ldexp(pow(0.5, static_cast<int>(i + 1)), 30), vec[i], 65536);
+    EXPECT_NEAR(ldexp(pow(0.5, static_cast<int>(i + 1)), 30), vec[i], 65537);
     // Tolerance 65536 in Q30 corresponds to a delta of approximately 0.00006.
     sum += vec[i];
   }

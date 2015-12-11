@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/buffer_level_filter.h"
 
 #include <algorithm>  // Provide access to std::max.
@@ -32,7 +34,7 @@ void BufferLevelFilter::Update(int buffer_size_packets,
   // |level_factor_| and |filtered_current_level_| are in Q8.
   // |buffer_size_packets| is in Q0.
   filtered_current_level_ = ((level_factor_ * filtered_current_level_) >> 8) +
-      ((256 - level_factor_) * buffer_size_packets);
+      ((256 - level_factor_) * static_cast<int>(buffer_size_packets));
 
   // Account for time-scale operations (accelerate and pre-emptive expand).
   if (time_stretched_samples && packet_len_samples > 0) {
@@ -42,7 +44,7 @@ void BufferLevelFilter::Update(int buffer_size_packets,
     // Make sure that the filtered value remains non-negative.
     filtered_current_level_ = std::max(0,
         filtered_current_level_ -
-        (time_stretched_samples << 8) / packet_len_samples);
+        (time_stretched_samples << 8) / static_cast<int>(packet_len_samples));
   }
 }
 
@@ -57,4 +59,9 @@ void BufferLevelFilter::SetTargetBufferLevel(int target_buffer_level) {
     level_factor_ = 254;
   }
 }
+
+int BufferLevelFilter::filtered_current_level() const {
+  return filtered_current_level_;
+}
+
 }  // namespace webrtc

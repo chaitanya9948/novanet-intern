@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/audio_multi_vector.h"
 
 #include <assert.h>
@@ -181,6 +183,10 @@ void AudioMultiVector::CrossFade(const AudioMultiVector& append_this,
       channels_[i]->CrossFade(append_this[i], fade_length);
     }
   }
+}
+
+size_t AudioMultiVector::Channels() const {
+  return num_channels_;
 }
 
 size_t AudioMultiVector::Size() const {

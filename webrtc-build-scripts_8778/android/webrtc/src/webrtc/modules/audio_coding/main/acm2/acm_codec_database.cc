@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 /*
  * This file generates databases with information about all supported audio
  * codecs.
@@ -129,76 +131,64 @@ const ACMCodecDB::CodecSettings ACMCodecDB::codec_settings_[] = {
     // Opus supports frames shorter than 10ms,
     // but it doesn't help us to use them.
     // Mono and stereo.
-    {4, {480, 960, 1920, 2880}, 0, 2, false},
+    {4, {480, 960, 1920, 2880}, 0, 2},
 #endif
     // Comfort noise for three different sampling frequencies.
-    {1, {240}, 240, 1, false},
-    {1, {480}, 480, 1, false},
-    {1, {960}, 960, 1, false},
+    {1, {240}, 240, 1},
+    {1, {480}, 480, 1},
+    {1, {960}, 960, 1},
 #ifdef ENABLE_48000_HZ
-    {1, {1440}, 1440, 1, false},
+    {1, {1440}, 1440, 1},
 #endif
-#ifdef WEBRTC_CODEC_AVT
-    {1, {240}, 240, 1, false},
-#endif
+    {1, {240}, 240, 1},
 #ifdef WEBRTC_CODEC_RED
-    {1, {0}, 0, 1, false},
+    {1, {0}, 0, 1},
 #endif
     // To prevent compile errors due to trailing commas.
-    {-1, {-1}, -1, -1, false}
+    {-1, {-1}, -1, -1}
 };
 
 // Create a database of all NetEQ decoders at compile time.
 const NetEqDecoder ACMCodecDB::neteq_decoders_[] = {
 #if (defined(WEBRTC_CODEC_ISAC) || defined(WEBRTC_CODEC_ISACFX))
-    kDecoderISAC,
+    NetEqDecoder::kDecoderISAC,
 # if (defined(WEBRTC_CODEC_ISAC))
-    kDecoderISACswb,
-    kDecoderISACfb,
+    NetEqDecoder::kDecoderISACswb,
 # endif
 #endif
-#ifdef WEBRTC_CODEC_PCM16
     // Mono
-    kDecoderPCM16B,
-    kDecoderPCM16Bwb,
-    kDecoderPCM16Bswb32kHz,
+    NetEqDecoder::kDecoderPCM16B, NetEqDecoder::kDecoderPCM16Bwb,
+    NetEqDecoder::kDecoderPCM16Bswb32kHz,
     // Stereo
-    kDecoderPCM16B_2ch,
-    kDecoderPCM16Bwb_2ch,
-    kDecoderPCM16Bswb32kHz_2ch,
-#endif
+    NetEqDecoder::kDecoderPCM16B_2ch, NetEqDecoder::kDecoderPCM16Bwb_2ch,
+    NetEqDecoder::kDecoderPCM16Bswb32kHz_2ch,
     // G.711, PCM mu-las and A-law.
     // Mono
-    kDecoderPCMu,
-    kDecoderPCMa,
+    NetEqDecoder::kDecoderPCMu, NetEqDecoder::kDecoderPCMa,
     // Stereo
-    kDecoderPCMu_2ch,
-    kDecoderPCMa_2ch,
+    NetEqDecoder::kDecoderPCMu_2ch, NetEqDecoder::kDecoderPCMa_2ch,
 #ifdef WEBRTC_CODEC_ILBC
-    kDecoderILBC,
+    NetEqDecoder::kDecoderILBC,
 #endif
 #ifdef WEBRTC_CODEC_G722
     // Mono
-    kDecoderG722,
+    NetEqDecoder::kDecoderG722,
     // Stereo
-    kDecoderG722_2ch,
+    NetEqDecoder::kDecoderG722_2ch,
 #endif
 #ifdef WEBRTC_CODEC_OPUS
     // Mono and stereo.
-    kDecoderOpus,
+    NetEqDecoder::kDecoderOpus,
 #endif
     // Comfort noise for three different sampling frequencies.
-    kDecoderCNGnb,
-    kDecoderCNGwb,
-    kDecoderCNGswb32kHz
+    NetEqDecoder::kDecoderCNGnb, NetEqDecoder::kDecoderCNGwb,
+    NetEqDecoder::kDecoderCNGswb32kHz,
 #ifdef ENABLE_48000_HZ
-    , kDecoderCNGswb48kHz
+    NetEqDecoder::kDecoderCNGswb48kHz,
 #endif
-#ifdef WEBRTC_CODEC_AVT
-    , kDecoderAVT
-#endif
+    NetEqDecoder::kDecoderAVT,
 #ifdef WEBRTC_CODEC_RED
-    , kDecoderRED
+    NetEqDecoder::kDecoderRED,
 #endif
 };
 

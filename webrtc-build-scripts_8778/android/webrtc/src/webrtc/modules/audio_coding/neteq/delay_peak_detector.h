@@ -7,7 +7,10 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+/********************
+Edited by Chaitanya Rajesh
 
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_DELAY_PEAK_DETECTOR_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_DELAY_PEAK_DETECTOR_H_
 
@@ -22,7 +25,7 @@ namespace webrtc {
 class DelayPeakDetector {
  public:
   DelayPeakDetector();
-  virtual ~DelayPeakDetector() {}
+  virtual ~DelayPeakDetector();
   virtual void Reset();
 
   // Notifies the DelayPeakDetector of how much audio data is carried in each
@@ -31,7 +34,7 @@ class DelayPeakDetector {
 
   // Returns true if peak-mode is active. That is, delay peaks were observed
   // recently.
-  virtual bool peak_found() { return peak_found_; }
+  virtual bool peak_found();
 
   // Calculates and returns the maximum delay peak height. Returns -1 if no
   // delay peaks have been observed recently. The unit is number of packets.

@@ -90,6 +90,58 @@ class StatisticsCalculator {
   static const int kMaxReportPeriod = 60;  // Seconds before auto-reset.
   static const int kLenWaitingTimes = 100;
 
+  class PeriodicUmaLogger {
+   public:
+    PeriodicUmaLogger(const std::string& uma_name,
+                      int report_interval_ms,
+                      int max_value);
+    virtual ~PeriodicUmaLogger();
+    void AdvanceClock(int step_ms);
+
+   protected:
+    void LogToUma(int value) const;
+    virtual int Metric() const = 0;
+    virtual void Reset() = 0;
+
+    const std::string uma_name_;
+    const int report_interval_ms_;
+    const int max_value_;
+    int timer_ = 0;
+  };
+
+  class PeriodicUmaCount final : public PeriodicUmaLogger {
+   public:
+    PeriodicUmaCount(const std::string& uma_name,
+                     int report_interval_ms,
+                     int max_value);
+    ~PeriodicUmaCount() override;
+    void RegisterSample();
+
+   protected:
+    int Metric() const override;
+    void Reset() override;
+
+   private:
+    int counter_ = 0;
+  };
+
+  class PeriodicUmaAverage final : public PeriodicUmaLogger {
+   public:
+    PeriodicUmaAverage(const std::string& uma_name,
+                       int report_interval_ms,
+                       int max_value);
+    ~PeriodicUmaAverage() override;
+    void RegisterSample(int value);
+
+   protected:
+    int Metric() const override;
+    void Reset() override;
+
+   private:
+    double sum_ = 0.0;
+    int counter_ = 0;
+  };
+
   // Calculates numerator / denominator, and returns the value in Q14.
   static int CalculateQ14Ratio(uint32_t numerator, uint32_t denominator);
 

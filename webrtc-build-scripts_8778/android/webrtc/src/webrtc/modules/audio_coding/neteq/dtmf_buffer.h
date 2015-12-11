@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_DTMF_BUFFER_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_DTMF_BUFFER_H_
 
@@ -55,14 +57,12 @@ class DtmfBuffer {
   };
 
   // Set up the buffer for use at sample rate |fs_hz|.
-  explicit DtmfBuffer(int fs_hz) {
-    SetSampleRate(fs_hz);
-  }
+  explicit DtmfBuffer(int fs_hz);
 
-  virtual ~DtmfBuffer() {}
+  virtual ~DtmfBuffer();
 
   // Flushes the buffer.
-  virtual void Flush() { buffer_.clear(); }
+  virtual void Flush();
 
   // Static method to parse 4 bytes from |payload| as a DTMF event (RFC 4733)
   // and write the parsed information into the struct |event|. Input variable
@@ -82,9 +82,9 @@ class DtmfBuffer {
   virtual bool GetEvent(uint32_t current_timestamp, DtmfEvent* event);
 
   // Number of events in the buffer.
-  virtual size_t Length() const { return buffer_.size(); }
+  virtual size_t Length() const;
 
-  virtual bool Empty() const { return buffer_.empty(); }
+  virtual bool Empty() const;
 
   // Set a new sample rate.
   virtual int SetSampleRate(int fs_hz);

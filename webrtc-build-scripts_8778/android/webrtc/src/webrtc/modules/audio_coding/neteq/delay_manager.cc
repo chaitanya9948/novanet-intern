@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/delay_manager.h"
 
 #include <assert.h>
@@ -372,11 +374,11 @@ int DelayManager::TargetLevel() const {
 }
 
 void DelayManager::LastDecoderType(NetEqDecoder decoder_type) {
-  if (decoder_type == kDecoderAVT ||
-      decoder_type == kDecoderCNGnb ||
-      decoder_type == kDecoderCNGwb ||
-      decoder_type == kDecoderCNGswb32kHz ||
-      decoder_type == kDecoderCNGswb48kHz) {
+  if (decoder_type == NetEqDecoder::kDecoderAVT ||
+      decoder_type == NetEqDecoder::kDecoderCNGnb ||
+      decoder_type == NetEqDecoder::kDecoderCNGwb ||
+      decoder_type == NetEqDecoder::kDecoderCNGswb32kHz ||
+      decoder_type == NetEqDecoder::kDecoderCNGswb48kHz) {
     last_pack_cng_or_dtmf_ = 1;
   } else if (last_pack_cng_or_dtmf_ != 0) {
     last_pack_cng_or_dtmf_ = -1;

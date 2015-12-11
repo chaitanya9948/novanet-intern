@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_MAIN_INTERFACE_AUDIO_CODING_MODULE_H_
 #define WEBRTC_MODULES_AUDIO_CODING_MAIN_INTERFACE_AUDIO_CODING_MODULE_H_
 
@@ -26,6 +28,8 @@ namespace webrtc {
 // forward declarations
 struct CodecInst;
 struct WebRtcRTPHeader;
+class AudioDecoder;
+class AudioEncoder;
 class AudioFrame;
 class RTPFragmentationHeader;
 
@@ -578,8 +582,7 @@ class AudioCodingModule {
   //   -1 if failed to register the codec
   //    0 if the codec registered successfully.
   //
-  virtual int32_t RegisterReceiveCodec(
-      const CodecInst& receive_codec) = 0;
+  virtual int32_t RegisterReceiveCodec(const CodecInst& receive_codec) = 0;
 
   ///////////////////////////////////////////////////////////////////////////
   // int32_t UnregisterReceiveCodec()

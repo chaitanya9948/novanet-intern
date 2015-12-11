@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/decision_logic.h"
 
 #include <algorithm>
@@ -164,7 +166,7 @@ void DecisionLogic::FilterBufferLevel(int buffer_size_samples,
     buffer_level_filter_->SetTargetBufferLevel(
         delay_manager_->base_target_level());
 
-    int buffer_size_packets = 0;
+    size_t buffer_size_packets = 0;
     if (packet_length_samples_ > 0) {
       // Calculate size in packets.
       buffer_size_packets = buffer_size_samples / packet_length_samples_;

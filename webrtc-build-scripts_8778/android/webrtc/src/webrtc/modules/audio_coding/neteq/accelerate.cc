@@ -7,17 +7,18 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/accelerate.h"
 
 #include "webrtc/common_audio/signal_processing/include/signal_processing_library.h"
 
 namespace webrtc {
 
-Accelerate::ReturnCodes Accelerate::Process(
-    const int16_t* input,
+Accelerate::ReturnCodes Accelerate::Process(const int16_t* input,
     size_t input_length,
-    AudioMultiVector* output,
+	    AudioMultiVector* output,
     int16_t* length_change_samples) {
   // Input length must be (almost) 30 ms.
   static const int k15ms = 120;  // 15 ms = 120 samples at 8 kHz sample rate.
@@ -41,8 +42,11 @@ void Accelerate::SetParametersForPassiveSpeech(size_t /*len*/,
 }
 
 Accelerate::ReturnCodes Accelerate::CheckCriteriaAndStretch(
-    const int16_t* input, size_t input_length, size_t peak_index,
-    int16_t best_correlation, bool active_speech,
+    const int16_t* input,
+	 size_t input_length, 
+	 size_t peak_index,
+    int16_t best_correlation, 
+	bool active_speech,
     AudioMultiVector* output) const {
   // Check for strong correlation or passive speech.
   if ((best_correlation > kCorrelationThreshold) || !active_speech) {

@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/normal.h"
 
 #include <string.h>  // memset, memcpy
@@ -74,7 +76,7 @@ int Normal::Process(const int16_t* input,
       size_t length_per_channel = length / output->Channels();
       // Find largest absolute value in new data.
       int16_t decoded_max = WebRtcSpl_MaxAbsValueW16(
-        signal,  static_cast<int>(length_per_channel));
+	  signal, length_per_channel);
       // Adjust muting factor if needed (to BGN level).
       int energy_length = std::min(static_cast<int>(fs_mult * 64),
                                    static_cast<int>(length_per_channel));

@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/audio_decoder_impl.h"
 
 #include <assert.h>
@@ -521,14 +523,14 @@ AudioDecoder* CreateAudioDecoder(NetEqDecoder codec_type) {
     case kDecoderOpus_2ch:
       return new AudioDecoderOpus(2);
 #endif
-    case kDecoderCNGnb:
-    case kDecoderCNGwb:
-    case kDecoderCNGswb32kHz:
-    case kDecoderCNGswb48kHz:
+    case NetEqDecoder::kDecoderCNGnb:
+    case NetEqDecoder::kDecoderCNGwb:
+    case NetEqDecoder::kDecoderCNGswb32kHz:
+    case NetEqDecoder::kDecoderCNGswb48kHz:
       return new AudioDecoderCng;
-    case kDecoderRED:
-    case kDecoderAVT:
-    case kDecoderArbitrary:
+    case NetEqDecoder::kDecoderRED:
+    case NetEqDecoder::kDecoderAVT:
+    case NetEqDecoder::kDecoderArbitrary:
     default: {
       return NULL;
     }

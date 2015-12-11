@@ -7,7 +7,10 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+/********************
+Edited by Chaitanya Rajesh
 
+*/
 #include "webrtc/modules/audio_coding/neteq/tools/constant_pcm_packet_source.h"
 
 #include <algorithm>
@@ -31,7 +34,7 @@ ConstantPcmPacketSource::ConstantPcmPacketSource(size_t payload_len_samples,
       seq_number_(0),
       timestamp_(0),
       payload_ssrc_(0xABCD1234) {
-  int encoded_len = WebRtcPcm16b_Encode(&sample_value, 1, encoded_sample_);
+int encoded_len = WebRtcPcm16b_Encode(&sample_value, 1, encoded_sample_);
   CHECK_EQ(encoded_len, 2);
 }
 

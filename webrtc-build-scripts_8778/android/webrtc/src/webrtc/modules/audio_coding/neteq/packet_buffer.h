@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_PACKET_BUFFER_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_PACKET_BUFFER_H_
 
@@ -43,7 +45,7 @@ class PacketBuffer {
   virtual void Flush();
 
   // Returns true for an empty buffer.
-  virtual bool Empty() const { return buffer_.empty(); }
+  virtual bool Empty() const;
 
   // Inserts |packet| into the buffer. The buffer will take over ownership of
   // the packet object.
@@ -105,15 +107,11 @@ class PacketBuffer {
                                 uint32_t horizon_samples);
 
   // Discards all packets that are (strictly) older than timestamp_limit.
-  virtual int DiscardAllOldPackets(uint32_t timestamp_limit) {
-    return DiscardOldPackets(timestamp_limit, 0);
-  }
+  virtual int DiscardAllOldPackets(uint32_t timestamp_limit);
 
   // Returns the number of packets in the buffer, including duplicates and
   // redundant packets.
-  virtual int NumPacketsInBuffer() const {
-    return static_cast<int>(buffer_.size());
-  }
+  virtual int NumPacketsInBuffer() const ;
 
   // Returns the number of samples in the buffer, including samples carried in
   // duplicate and redundant packets.

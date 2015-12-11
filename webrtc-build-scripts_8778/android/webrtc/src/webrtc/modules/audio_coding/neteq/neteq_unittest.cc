@@ -11,7 +11,9 @@
 /*
  * This file includes unit tests for NetEQ.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #include "webrtc/modules/audio_coding/neteq/interface/neteq.h"
 
 #include <math.h>
@@ -317,17 +319,18 @@ void NetEqDecodingTest::LoadDecoders() {
   ASSERT_EQ(0, neteq_->RegisterPayloadType(kDecoderISACswb, 104));
   // Load iSAC FB.
   ASSERT_EQ(0, neteq_->RegisterPayloadType(kDecoderISACfb, 105));
-#endif  // WEBRTC_ANDROID
+#endif
   // Load PCM16B nb.
-  ASSERT_EQ(0, neteq_->RegisterPayloadType(kDecoderPCM16B, 93));
+  ASSERT_EQ(0, neteq_->RegisterPayloadType(NetEqDecoder::kDecoderPCM16B, 93));
   // Load PCM16B wb.
-  ASSERT_EQ(0, neteq_->RegisterPayloadType(kDecoderPCM16Bwb, 94));
+  ASSERT_EQ(0, neteq_->RegisterPayloadType(NetEqDecoder::kDecoderPCM16Bwb, 94));
   // Load PCM16B swb32.
-  ASSERT_EQ(0, neteq_->RegisterPayloadType(kDecoderPCM16Bswb32kHz, 95));
+  ASSERT_EQ(
+      0, neteq_->RegisterPayloadType(NetEqDecoder::kDecoderPCM16Bswb32kHz, 95));
   // Load CNG 8 kHz.
-  ASSERT_EQ(0, neteq_->RegisterPayloadType(kDecoderCNGnb, 13));
+  ASSERT_EQ(0, neteq_->RegisterPayloadType(NetEqDecoder::kDecoderCNGnb, 13));
   // Load CNG 16 kHz.
-  ASSERT_EQ(0, neteq_->RegisterPayloadType(kDecoderCNGwb, 98));
+  ASSERT_EQ(0, neteq_->RegisterPayloadType(NetEqDecoder::kDecoderCNGwb, 98));
 }
 
 void NetEqDecodingTest::OpenInputFile(const std::string &rtp_file) {

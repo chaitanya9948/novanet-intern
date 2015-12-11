@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+ /********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_NETEQ_DECODER_DATABASE_H_
 #define WEBRTC_MODULES_AUDIO_CODING_NETEQ_DECODER_DATABASE_H_
 
@@ -37,11 +39,10 @@ class DecoderDatabase {
   struct DecoderInfo {
     // Constructors.
     DecoderInfo()
-        : codec_type(kDecoderArbitrary),
+        : codec_type(NetEqDecoder::kDecoderArbitrary),
           fs_hz(8000),
           decoder(NULL),
-          external(false) {
-    }
+          external(false) {}
     DecoderInfo(NetEqDecoder ct, int fs, AudioDecoder* dec, bool ext)
         : codec_type(ct),
           fs_hz(fs),

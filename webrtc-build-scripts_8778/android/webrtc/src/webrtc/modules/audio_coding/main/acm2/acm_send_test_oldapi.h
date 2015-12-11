@@ -7,7 +7,9 @@
  *  in the file PATENTS.  All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
-
+/********************
+Edited by Chaitanya Rajesh
+*/
 #ifndef WEBRTC_MODULES_AUDIO_CODING_MAIN_ACM2_ACM_SEND_TEST_H_
 #define WEBRTC_MODULES_AUDIO_CODING_MAIN_ACM2_ACM_SEND_TEST_H_
 
@@ -20,6 +22,7 @@
 #include "webrtc/system_wrappers/interface/clock.h"
 
 namespace webrtc {
+class AudioEncoder;
 
 namespace test {
 class InputAudioFile;
@@ -39,6 +42,9 @@ class AcmSendTestOldApi : public AudioPacketizationCallback,
                      int channels,
                      int payload_type,
                      int frame_size_samples);
+
+  // Registers an external send codec. Returns true on success, false otherwise.
+  bool RegisterExternalCodec(AudioEncoder* external_speech_encoder);
 
   // Returns the next encoded packet. Returns NULL if the test duration was
   // exceeded. Ownership of the packet is handed over to the caller.
